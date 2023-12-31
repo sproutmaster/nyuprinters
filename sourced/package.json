@@ -1,0 +1,22 @@
+{
+  "name": "printer_info_snatcher",
+  "version": "2.0.0",
+  "description": "Scrapes printer info from web UI",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Joe Prakash",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^6.0.1",
+    "ip-address-validator": "^1.0.9",
+    "is-reachable": "^5.2.1",
+    "morgan": "^1.10.0",
+    "process": "^0.11.10",
+    "puppeteer": "^19.5.2"
+  }
+}
