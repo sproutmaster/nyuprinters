@@ -3,6 +3,8 @@ services:
   mongodb:
     container_name: nyup-mongodb
     image: mongo:latest
+    ports:
+      - '27017:27017'
     environment:
       - 'MONGO_INITDB_ROOT_USERNAME=admin'
       - 'MONGO_INITDB_ROOT_PASSWORD=admin'
@@ -15,11 +17,14 @@ services:
   redis:
     container_name: nyup-redis
     image: redis:latest
+    ports:
+      - '6379:6379'
     volumes:
       - 'nyup-redis:/data:rw'
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
 
+# By default stored in var/lib/docker/volumes
 volumes:
   nyup-mongodb:
   nyup-mongoconfig:
