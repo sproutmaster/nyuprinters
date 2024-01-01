@@ -11,8 +11,6 @@ services:
     volumes:
       - 'nyup-mongodb:/data/db:rw'
       - 'nyup-mongoconfig:/data/configdb:rw'
-      - '/etc/timezone:/etc/timezone:ro'
-      - '/etc/localtime:/etc/localtime:ro'
 
   redis:
     container_name: nyup-redis
@@ -22,8 +20,6 @@ services:
     command: redis-server --loglevel verbose
     volumes:
       - 'nyup-redis:/data:rw'
-      - '/etc/timezone:/etc/timezone:ro'
-      - '/etc/localtime:/etc/localtime:ro'
 
 # By default stored in var/lib/docker/volumes
 volumes:
