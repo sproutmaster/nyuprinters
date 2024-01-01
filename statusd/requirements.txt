@@ -1,0 +1,9 @@
+Flask
+flask-oidc
+flask-mongoengine
+itsdangerous==2.0.1
+asgiref
+oauth2client~=4.1.3
+aiohttp~=3.8.4
+redis~=4.5.4
+gunicorn
