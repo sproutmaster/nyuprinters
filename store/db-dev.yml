@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   mongodb:
-    container_name: nyup-dev-mongodb
+    container_name: nyup-mongodb
     image: mongo:latest
     ports:
       - '27017:27017'
@@ -15,10 +15,11 @@ services:
       - '/etc/localtime:/etc/localtime:ro'
 
   redis:
-    container_name: nyup-dev-redis
+    container_name: nyup-redis
     image: redis:latest
     ports:
       - '6379:6379'
+    command: redis-server --loglevel verbose
     volumes:
       - 'nyup-redis:/data:rw'
       - '/etc/timezone:/etc/timezone:ro'
