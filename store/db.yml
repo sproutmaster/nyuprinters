@@ -8,7 +8,6 @@ services:
       - 'MONGO_INITDB_ROOT_PASSWORD=admin'
     volumes:
       - 'nyup-mongodb:/data/db:rw'
-      - 'nyup-mongoconfig:/data/configdb:rw'
       - '/etc/timezone:/etc/timezone:ro'
       - '/etc/localtime:/etc/localtime:ro'
 
@@ -22,5 +21,4 @@ services:
 
 volumes:
   nyup-mongodb:
-  nyup-mongoconfig:
   nyup-redis:
