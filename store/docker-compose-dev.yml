@@ -9,8 +9,8 @@ services:
       - 'MONGO_INITDB_ROOT_USERNAME=admin'
       - 'MONGO_INITDB_ROOT_PASSWORD=admin'
     volumes:
-      - 'nyup-mongodb:/data/db:rw'
-      - 'nyup-mongoconfig:/data/configdb:rw'
+      - 'nyup_mongodb:/data/db:rw'
+      - 'nyup_mongoconfig:/data/configdb:rw'
 
   redis:
     container_name: nyup-redis
@@ -19,10 +19,10 @@ services:
       - '6379:6379'
     command: redis-server --loglevel verbose
     volumes:
-      - 'nyup-redis:/data:rw'
+      - 'nyup_redis:/data:rw'
 
 # By default stored in var/lib/docker/volumes
 volumes:
-  nyup-mongodb:
-  nyup-mongoconfig:
-  nyup-redis:
+  nyup_mongodb:
+  nyup_mongoconfig:
+  nyup_redis:

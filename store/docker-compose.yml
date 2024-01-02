@@ -7,18 +7,14 @@ services:
       - 'MONGO_INITDB_ROOT_USERNAME=admin'
       - 'MONGO_INITDB_ROOT_PASSWORD=admin'
     volumes:
-      - 'nyup-mongodb:/data/db:rw'
-      - '/etc/timezone:/etc/timezone:ro'
-      - '/etc/localtime:/etc/localtime:ro'
+      - 'nyup_mongodb:/data/db:rw'
 
   redis:
     container_name: nyup-redis
     image: redis:latest
     volumes:
-      - 'nyup-redis:/data:rw'
-      - '/etc/timezone:/etc/timezone:ro'
-      - '/etc/localtime:/etc/localtime:ro'
+      - 'nyup_redis:/data:rw'
 
 volumes:
-  nyup-mongodb:
-  nyup-redis:
+  nyup_mongodb:
+  nyup_redis:
