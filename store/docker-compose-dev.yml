@@ -1,16 +1,18 @@
 version: '3.7'
 services:
-  mongodb:
-    container_name: nyup-mongodb
-    image: mongo:latest
-    ports:
-      - '27017:27017'
+  mysql:
+    container_name: nyup-mysql
+    image: mysql:latest
+    restart: always
     environment:
-      - 'MONGO_INITDB_ROOT_USERNAME=admin'
-      - 'MONGO_INITDB_ROOT_PASSWORD=admin'
+      MYSQL_DATABASE: 'nyup'
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_ROOT_PASSWORD: 'admin'
+    ports:
+      - '3306:3306'
     volumes:
-      - 'nyup_mongodb:/data/db:rw'
-      - 'nyup_mongoconfig:/data/configdb:rw'
+      - 'nyup_musql:/var/lib/mysql:rw'
 
   redis:
     container_name: nyup-redis
@@ -23,6 +25,5 @@ services:
 
 # By default stored in var/lib/docker/volumes
 volumes:
-  nyup_mongodb:
-  nyup_mongoconfig:
+  nyup_musql:
   nyup_redis:
