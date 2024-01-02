@@ -14,19 +14,20 @@ app.use(morgan('tiny'));
 app.use(cors());
 
 let system = {
-    browser : null,
-    printer : null,
-    timeout : 5000,
-    error : []
+    browser: null,
+    printer: null,
+    timeout: 5000,
+    error: []
 };
 
-let response_message = {
-    info: {
-        api_name: "Printer Info Snatcher",
-        supported_printers: "HP Enterprise M-series",
-        request_format: "http://app-ip-address?ip=w.x.y.z",
-    }
+let response_message = {};
+
+let info_message = {
+    api_name: "Printer Info Snatcher",
+    supported_printers: "HP Enterprise M-series",
+    request_format: "http://app-ip-address?ip=w.x.y.z",
 };
+
 
 (async () => {
     system.browser = await pupp.launch({
@@ -59,6 +60,7 @@ class Printer {
         this.supplies = {};
         this.errors = null;
     }
+
     async get_info() {
         // See if printer is online, if not return an error
         if (!await isReachable(this.host)) {
@@ -66,9 +68,7 @@ class Printer {
                 status: "error",
                 message: "Printer unreachable"
             };
-        }
-
-        else {
+        } else {
             const result = [await get_device_details(this), await get_supply_details(this), await get_tray_details(this)];
 
             if (result.includes(-1)) {
@@ -76,9 +76,7 @@ class Printer {
                     status: "error",
                     message: system.error
                 };
-            }
-
-            else {
+            } else {
                 this.type = await this.model.includes("Color") ? "color" : "grayscale";
 
                 printer_message = {
@@ -90,35 +88,33 @@ class Printer {
     }
 }
 
-async function get_device_details(printer_obj){
+async function get_device_details(printer_obj) {
     const page = await system.browser.newPage();
 
     try {
         await page.goto(`https://${printer_obj.host}/hp/device/DeviceInformation/View`, browser_params);
 
-        printer_obj.model = await page.evaluate(()=> {
+        printer_obj.model = await page.evaluate(() => {
             return document.querySelector("#ProductName").textContent;
         })
-        printer_obj.name = await page.evaluate(()=> {
+        printer_obj.name = await page.evaluate(() => {
             return document.querySelector("#DeviceName").textContent;
         });
-        printer_obj.serial = await page.evaluate(()=> {
+        printer_obj.serial = await page.evaluate(() => {
             return document.querySelector("#DeviceSerialNumber").textContent;
         });
-        printer_obj.location = await page.evaluate(()=> {
+        printer_obj.location = await page.evaluate(() => {
             return document.querySelector("#DeviceLocation").textContent;
         });
-    }
-    catch {
+    } catch {
         system.error.push("Cannot get device details");
         return -1;
-    }
-    finally {
+    } finally {
         await page.close(); // this will be executed regardless of the return statement above
     }
 }
 
-async function get_supply_details(printer_obj){
+async function get_supply_details(printer_obj) {
     const page = await system.browser.newPage();
 
     try {
@@ -126,24 +122,22 @@ async function get_supply_details(printer_obj){
 
         let cartridges = await page.evaluate(() => {
             return Array.from(document.querySelectorAll(".cartridges .consumable h2"))
-                .map (x=> x.textContent);
+                .map(x => x.textContent);
         });
 
         let levels = await page.evaluate(() => {
             return Array.from(document.querySelectorAll(".cartridges .consumable .plr"))
-                .map (x=> x.textContent.replace("%*", ''));
+                .map(x => x.textContent.replace("%*", ''));
         });
 
-        for(let i = 0; i < cartridges.length; ++i) {
+        for (let i = 0; i < cartridges.length; ++i) {
             printer_obj.supplies[cartridges[i]] = levels[i];
         }
 
-    }
-    catch {
+    } catch {
         system.error.push("Cannot get cartridge info");
         return -1;
-    }
-    finally {
+    } finally {
         await page.close();
     }
 }
@@ -194,26 +188,27 @@ async function get_tray_details(printer_obj) {
         });
 
         printer_obj.errors = machine_status_array.filter(msg => msg !== "Ready");
-    }
-    catch {
+    } catch {
         system.error.push("Cannot get tray info");
         return -1;
-    }
-    finally {
+    } finally {
         await page.close();
     }
 }
 
-app.get('/', async (req, res) =>
-{
+app.get('/', async (req, res) => {
     let ip = req.query.ip;
-    if (ip === undefined)
-        res.status(200).json(response_message);
 
-    else {
+    delete response_message.response;
+    delete response_message.request;
+    delete response_message.info;
+
+    if (ip === undefined) {
+        response_message.info = info_message;
+        res.status(200).json(response_message);
+    } else {
         ip = ip.trim();
-        if (isIPV4Address(ip))
-        {
+        if (isIPV4Address(ip)) {
             system.printer = new Printer(ip);
             await system.printer.get_info();
             response_message.response = printer_message;
@@ -223,9 +218,7 @@ app.get('/', async (req, res) =>
 
             system.printer = null;
             system.error = [];
-        }
-
-        else {
+        } else {
             response_message.response = {
                 status: "error",
                 message: "Invalid IPV4 Address"
