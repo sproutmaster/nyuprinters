@@ -41,16 +41,20 @@ for raw_resp in printer_sample_data:
     resp = raw_resp['response']
     if resp.get('status') == 'success':
         p = resp['message']
-        printer = Printer(name=p['name'],
+        m = raw_resp['meta']
+        printer = Printer(
+                          name=m['name'],
                           model=p['model'],
-                          ip_address=p['host'],
-                          last_status=json.dumps(p),
+                          serial=m['serial'],
+                          ip_address=m['ip'],
+                          current_state=json.dumps(p),
+                          last_state=json.dumps(p),
                           last_online=func.now(),
                           location=random.choice(locations)
                           )
 
     else:
-        resp = raw_resp['request']
+        resp = raw_resp['meta']
         printer = Printer(name=f"Printer {resp['ip']}",
                           ip_address=resp['ip'],
                           location=random.choice(locations)
