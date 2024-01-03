@@ -3,11 +3,9 @@
     "response": {
       "status": "success",
       "message": {
-        "host": "10.0.69.11",
         "name": "Nofoundland Printer 1",
         "type": "color",
         "model": "HP Color LaserJet M651",
-        "serial": "SSSS1111",
         "location": "",
         "trays": {
           "Tray 1": {
@@ -34,8 +32,11 @@
         "errors": []
       }
     },
-    "request": {
-      "ip": "10.0.69.11"
+    "meta": {
+      "ip": "10.0.69.11",
+      "id": "1",
+      "name": "Printer 1",
+      "serial": "SSSS1111"
     }
   },
   {
@@ -89,19 +90,20 @@
         ]
       }
     },
-    "request": {
-      "ip": "10.0.69.12"
+    "meta": {
+      "ip": "10.0.69.12",
+      "id": "2",
+      "name": "Printer 2",
+      "serial": "SSSS2222"
     }
   },
   {
     "response": {
       "status": "success",
       "message": {
-        "host": "10.0.69.13",
         "name": "Nofoundland Printer 3",
         "type": "grayscale",
         "model": "HP LaserJet M806",
-        "serial": "SSSS3333",
         "location": "",
         "trays": {
           "Tray 1": {
@@ -144,8 +146,11 @@
         ]
       }
     },
-    "request": {
-      "ip": "10.0.69.13"
+    "meta": {
+      "ip": "10.0.69.13",
+      "id": "3",
+      "name": "Printer 3",
+      "serial": "SSSS3333"
     }
   },
   {
@@ -153,19 +158,20 @@
       "status": "error",
       "message": "Printer unreachable"
     },
-    "request": {
-      "ip": "10.0.69.14"
+    "meta": {
+      "ip": "10.0.69.14",
+      "id": "4",
+      "name": "Printer 4",
+      "serial": "SSSS4444"
     }
   },
   {
     "response": {
       "status": "success",
       "message": {
-        "host": "10.0.69.15",
         "name": "Nofoundland Printer 5",
         "type": "grayscale",
         "model": "HP LaserJet M806",
-        "serial": "SSSS5555",
         "location": "",
         "trays": {
           "Tray 1": {
@@ -208,19 +214,20 @@
         ]
       }
     },
-    "request": {
-      "ip": "10.0.69.15"
+    "meta": {
+      "ip": "10.0.69.15",
+      "id": "5",
+      "name": "Printer 5",
+      "serial": "SSSS5555"
     }
   },
   {
     "response": {
       "status": "success",
       "message": {
-        "host": "10.0.69.16",
         "name": "Nofoundland Printer 6",
         "type": "color",
         "model": "HP Color LaserJet M651",
-        "serial": "SSSS6666",
         "location": "",
         "trays": {
           "Tray 1": {
@@ -247,8 +254,11 @@
         "errors": []
       }
     },
-    "request": {
-      "ip": "10.0.69.16"
+    "meta": {
+      "ip": "10.0.69.16",
+      "id": "6",
+      "name": "Printer 6",
+      "serial": "SSSS6666"
     }
   },
   {
@@ -256,8 +266,11 @@
       "status": "error",
       "message": "Printer unreachable"
     },
-    "request": {
-      "ip": "10.0.69.17"
+    "meta": {
+      "ip": "10.0.69.17",
+      "id": "7",
+      "name": "Printer 7",
+      "serial": "SSSS7777"
     }
   }
 ]
