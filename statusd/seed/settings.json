@@ -1,0 +1,30 @@
+[
+  {
+    "key": "updated_run",
+    "value": "True",
+    "default_value": "True",
+    "type": "bool",
+    "description": "Whether or not to run the update script"
+  },
+  {
+    "key": "updated_update_interval",
+    "value": "60",
+    "default_value": "60",
+    "type": "int",
+    "description": "The interval in seconds between updates of the sourced data"
+  },
+  {
+    "key": "updated_try_timout",
+    "value": "9000",
+    "default_value": "9000",
+    "type": "int",
+    "description": "The timeout in seconds given to sourced to fetch data"
+  },
+  {
+    "key": "updated_try_delay_factor",
+    "value": "0",
+    "default_value": "0",
+    "type": "int",
+    "description": "The delay in seconds given to sourced between requests to fetch data"
+  }
+]
