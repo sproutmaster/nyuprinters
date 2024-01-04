@@ -11,6 +11,8 @@ from sqlalchemy.sql import func
 
 with app.app_context():
     db.drop_all()
+    if os.environ.get("WIPE_NYUP_DB"):
+        sys.exit(0)
     db.create_all()
 
 with open('seed/locations.json', 'r') as file:
