@@ -1,29 +1,17 @@
 version: '3.7'
 services:
-  mysql:
-    container_name: nyup-mysql
-    image: mysql:latest
-    restart: always
+  postgres:
+    container_name: nyup-postgres
+    image: postgres:14-alpine
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'nyup_postgres:/var/lib/postgresql/data:rw'
     environment:
-      MYSQL_DATABASE: 'nyup'
-      MYSQL_USER: 'admin'
-      MYSQL_PASSWORD: 'admin'
-      MYSQL_ROOT_PASSWORD: 'admin'
-    ports:
-      - '3306:3306'
-    volumes:
-      - 'nyup_musql:/var/lib/mysql:rw'
-
-  redis:
-    container_name: nyup-redis
-    image: redis:latest
-    ports:
-      - '6379:6379'
-    command: redis-server --loglevel verbose
-    volumes:
-      - 'nyup_redis:/data:rw'
+      - 'POSTGRES_PASSWORD=admin'
+      - 'POSTGRES_USER=admin'
+      - 'POSTGRES_DB=nyup'
 
 # By default stored in var/lib/docker/volumes
 volumes:
-  nyup_musql:
-  nyup_redis:
+  nyup_postgres:
