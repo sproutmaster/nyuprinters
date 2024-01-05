@@ -4,7 +4,11 @@ help:
 
 .PHONY: dev
 dev:
-	$(MAKE) -j sourcedrun storerun updatedrun statusdrun
+	$(MAKE) -j sourcedrun statusdrun storerun updatedrun
+
+.PHONY: mindev
+mindev:
+	$(MAKE) -j storerun statusdrun
 
 sourcedrun:
 	@echo "sourced: localhost:8000"
