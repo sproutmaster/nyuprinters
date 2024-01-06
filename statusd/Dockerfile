@@ -1,6 +1,7 @@
 FROM python:3.11-bullseye
 
 RUN apt update \
+  && apt install build-dep \
   && rm -rf /var/lib/apt/lists/ \
   && pip3 install -r requirements.txt
 
