@@ -4,11 +4,13 @@ help:
 
 .PHONY: dev
 dev:
-	$(MAKE) -j sourcedrun statusdrun storerun updatedrun
+	$(MAKE) storerun
+	$(MAKE) -j sourcedrun statusdrun updatedrun
 
 .PHONY: mindev
 mindev:
-	$(MAKE) -j storerun statusdrun
+	$(MAKE) storerun
+	$(MAKE) statusdrun
 
 sourcedrun:
 	@echo "### sourced: localhost:8000"
@@ -19,7 +21,7 @@ statusdrun:
 	$(MAKE) -C statusd run
 
 storerun:
-	@echo "### Postgres: localhost:5432"
+	@echo "### postgres: localhost:5432"
 	$(MAKE) -C store run
 
 updatedrun:
