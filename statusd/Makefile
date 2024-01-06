@@ -18,11 +18,15 @@ venv:
 #		./.venv/bin/activate; \
 	fi
 
+.PHONY: seed
+seed: venv
+	./.venv/bin/python3 seed/seeder.py
+
 .PHONY: req
 requirements: venv
 	pip-compile --quiet --upgrade requirements.txt
 
 .PHONY: clean
 clean:
-	@echo "### Cleaning up"
-	rm -rf .venv
+	@echo "### Deleting virtual environment"
+	rm -rf $$(find -name __pycache__) .venv
