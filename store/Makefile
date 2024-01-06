@@ -10,5 +10,5 @@ stop:
 
 .PHONY: reset
 reset:
-	@echo "### Cleaning DB services"
+	@echo "### Deleting DB services"
 	docker compose -f docker-compose-dev.yml down -v
