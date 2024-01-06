@@ -6,12 +6,13 @@ help:
 
 .PHONY: run
 run: venv
+	@echo "### Starting statusd"
 	./.venv/bin/python3 main.py
 
 .PHONY: venv
 venv:
 	@if [ ! -d .venv ]; then \
-  		echo "### Creating virtual environment"; \
+  		echo "### Creating statusd virtual environment"; \
 		$(PYTHON) -m venv .venv; \
 		./.venv/bin/python3 -m pip install --upgrade pip; \
 		./.venv/bin/pip install -r requirements.txt; \
@@ -20,13 +21,15 @@ venv:
 
 .PHONY: seed
 seed: venv
+	@echo "### Seeding database"
 	./.venv/bin/python3 seed/seeder.py
 
 .PHONY: req
 requirements: venv
+	@echo "### Updating ststusd requirements"
 	pip-compile --quiet --upgrade requirements.txt
 
 .PHONY: clean
 clean:
-	@echo "### Deleting virtual environment"
+	@echo "### Deleting statusd virtual environment"
 	rm -rf $$(find -name __pycache__) .venv
