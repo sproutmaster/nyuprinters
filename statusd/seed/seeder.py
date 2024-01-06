@@ -6,7 +6,7 @@ import random
 models_dir = os.path.abspath(os.path.join(os.path.dirname(__name__), '../statusd/models'))
 sys.path.append(models_dir)
 
-from dbmodel import app, db, Printer, Location, Settings
+from dbmodel import app, db, Printer, Location, Setting
 from sqlalchemy.sql import func
 
 with app.app_context():
@@ -29,7 +29,9 @@ locations = []
 settings = []
 
 for raw_resp in location_sample_data:
-    loc = Location(name=raw_resp['name'], short_name=raw_resp['short_name'], description=raw_resp['description'])
+    loc = Location(name=raw_resp['name'],
+                   short_name=raw_resp['short_name'],
+                   description=raw_resp['description'])
     locations.append(loc)
 
 with app.app_context():
@@ -44,8 +46,7 @@ for raw_resp in printer_sample_data:
     if resp.get('status') == 'success':
         p = resp['message']
         m = raw_resp['meta']
-        printer = Printer(
-                          name=m['name'],
+        printer = Printer(name=m['name'],
                           model=p['model'],
                           serial=m['serial'],
                           ip_address=m['ip'],
@@ -69,12 +70,12 @@ with app.app_context():
     db.session.commit()
 
 for pref in settings_sample_data:
-    setting = Settings(key=pref['key'],
-                       value=pref['value'],
-                       default_value=pref['default_value'],
-                       type=pref['type'],
-                       description=pref['description']
-                       )
+    setting = Setting(key=pref['key'],
+                      value=pref['value'],
+                      default_value=pref['default_value'],
+                      type=pref['type'],
+                      description=pref['description']
+                      )
     settings.append(setting)
 
 with app.app_context():
