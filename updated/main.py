@@ -1,4 +1,5 @@
 from os import environ
+from datetime import datetime
 import psycopg2
 import aiohttp
 import asyncio
@@ -37,18 +38,23 @@ async def get_status(session: aiohttp.ClientSession, db, url: str, printer_id: i
             cur = db.cursor()
 
             # get current_state value from db
-            cur.execute("SELECT current_state FROM printers WHERE id = %s", (printer_id,))
+            cur.execute("SELECT current_state, last_online FROM printers WHERE id = %s", (printer_id,))
             current_state = cur.fetchone()[0]
+            last_online = cur.fetchone()[1]
 
             if res['response']['status'] == 'success':
                 res['meta']['serial'] = res['response']['message']['serial']
 
                 del res['response']['message']['host']
                 del res['response']['message']['serial']
+                last_online = datetime.now()
 
-            cur.execute("INSERT INTO printers (current_state, last_state) VALUES (%s, %s) WHERE id = (%s)",
-                        (json.dumps(res), current_state, printer_id,))
-            
+            cur.execute("INSERT INTO printers "
+                        "(current_state, last_state, last_online, last_updated) VALUES (%s, %s) "
+                        "WHERE id = (%s)",
+                        (json.dumps(res), current_state, last_online, datetime.now(),
+                         printer_id,))
+
             cur.close()
             db.commit()
 
