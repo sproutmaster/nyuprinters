@@ -8,7 +8,7 @@ stop:
 	@echo "### Stopping DB services"
 	docker compose -f docker-compose-dev.yml stop
 
-.PHONY: clean
-clean:
+.PHONY: reset
+reset:
 	@echo "### Cleaning DB services"
-	docker compose -v -f docker-compose-dev.yml down
+	docker compose -f docker-compose-dev.yml down -v
