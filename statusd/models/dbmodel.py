@@ -22,7 +22,7 @@ class Location(db.Model):
     printers = db.relationship('Printer', backref=db.backref('location'))
 
     def __repr__(self):
-        return '<Locations %r>' % self.name
+        return f'<Location {self.id}, {self.name}>'
 
 
 class Printer(db.Model):
@@ -40,10 +40,10 @@ class Printer(db.Model):
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id', ondelete='CASCADE', onupdate='CASCADE'))
 
     def __repr__(self):
-        return '<Printer %r>' % self.name
+        return f'<Printer {self.id}, {self.name}, {self.ip} at Location<{self.location_id}>>'
 
 
-class Settings(db.Model):
+class Setting(db.Model):
     __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     key = db.Column(db.String(25), nullable=False, unique=True)
@@ -53,4 +53,4 @@ class Settings(db.Model):
     description = db.Column(db.Text)
 
     def __repr__(self):
-        return '<Settings %r>' % self.key
+        return f'<Setting {self.key}: {self.value}>'
