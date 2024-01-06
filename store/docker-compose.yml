@@ -1,20 +1,16 @@
 version: '3.7'
 services:
-  mongodb:
-    container_name: nyup-mongodb
-    image: mongo:latest
+  postgres:
+    container_name: nyup-postgres
+    image: postgres:14-alpine
+    expose:
+      - '5432'
+    volumes:
+      - 'nyup_postgres:/var/lib/postgresql/data:rw'
     environment:
-      - 'MONGO_INITDB_ROOT_USERNAME=admin'
-      - 'MONGO_INITDB_ROOT_PASSWORD=admin'
-    volumes:
-      - 'nyup_mongodb:/data/db:rw'
-
-  redis:
-    container_name: nyup-redis
-    image: redis:latest
-    volumes:
-      - 'nyup_redis:/data:rw'
+      - 'POSTGRES_PASSWORD=admin'
+      - 'POSTGRES_USER=admin'
+      - 'POSTGRES_DB=nyup'
 
 volumes:
-  nyup_mongodb:
-  nyup_redis:
+  nyup_postgres:
