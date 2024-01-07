@@ -6,9 +6,10 @@
 #######################################################
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from os import environ
+
+from models import db
 
 
 class Env:
@@ -20,11 +21,12 @@ class Env:
 
 env = Env()
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = env.postgres_uri
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
 
-db = SQLAlchemy(app)
-
-migrate = Migrate(app, db)
+def create_app():
+    app = Flask(__name__)
+    app.config["SQLALCHEMY_DATABASE_URI"] = env.postgres_uri
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_ECHO"] = False
+    db.init_app(app)
+    Migrate(app, db)
+    return app

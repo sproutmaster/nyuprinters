@@ -30,6 +30,7 @@ updatedrun:
 .PHONY: seed
 seed:
 	$(MAKE) -C store run
+	sleep 3
 	$(MAKE) -C statusd seed
 
 .PHONY: clean

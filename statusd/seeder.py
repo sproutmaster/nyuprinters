@@ -2,12 +2,12 @@ import os
 import sys
 import json
 import random
-
-models_dir = os.path.abspath(os.path.join(os.path.dirname(__name__), '../statusd/models'))
-sys.path.append(models_dir)
-
-from dbmodel import app, db, Printer, Location, Setting
 from sqlalchemy.sql import func
+
+from models import db, Location, Printer, Setting
+from app import create_app
+
+app = create_app()
 
 with app.app_context():
     db.drop_all()

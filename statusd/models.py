@@ -1,16 +1,8 @@
-try:
-    from statusd._statusd import db
-except ModuleNotFoundError:
-    from flask import Flask
-    from flask_sqlalchemy import SQLAlchemy
-
-    app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://admin:admin@localhost:5432/nyup"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SQLALCHEMY_ECHO"] = False
-    db = SQLAlchemy(app)
-
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+from pytz import timezone
+from json import loads as json_loads
+db = SQLAlchemy()
 
 
 class Location(db.Model):
@@ -39,8 +31,24 @@ class Printer(db.Model):
     display = db.Column(db.Boolean, default=True)
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id', ondelete='CASCADE', onupdate='CASCADE'))
 
+    @property
+    def info(self):
+        cur_state = json_loads(self.current_state) if self.current_state else ''
+        meta = {
+            'id': self.id,
+            'name': self.name,
+            'location': self.location.short_name,
+            'last_online': self.last_online,
+            'last_updated': self.last_updated,
+        }
+
+        return {
+            'meta': meta,
+            'data': cur_state,
+        }
+
     def __repr__(self):
-        return f'<Printer {self.id}, {self.name}, {self.ip} at Location<{self.location_id}>>'
+        return f'<Printer {self.id}, {self.name}, {self.ip_address} at Location<{self.location_id}>>'
 
 
 class Setting(db.Model):

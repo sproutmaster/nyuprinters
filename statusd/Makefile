@@ -22,7 +22,7 @@ venv:
 .PHONY: seed
 seed: venv
 	@echo "### Seeding database"
-	./.venv/bin/python3 seed/seeder.py
+	./.venv/bin/python3 seeder.py
 
 .PHONY: req
 requirements: venv
