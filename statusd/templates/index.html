@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block body %}
+    <style>
+        @media (min-width: 992px) {
+            #intro {
+                margin-top: -58.59px;
+            }
+        }
+
+        .navbar .nav-link {
+            color: #fff !important;
+        }
+    </style>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark d-none d-lg-block" style="z-index: 2000;">
+            <div class="container-fluid">
+                <a class="navbar-brand nav-link text-lg-center" target="_blank" href="#">
+                    NYUPRINTERS
+                </a>
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                        data-mdb-target="#navbarExample01"
+                        aria-controls="navbarExample01" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarExample01">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+
+                    <ul class="navbar-nav d-flex flex-row">
+                        <!-- Icons -->
+                        <li class="nav-item me-3 me-lg-0">
+                            <a class="nav-link" href="{{ discord }}" rel="nofollow" target="_blank">
+                                <i class="fab fa-discord"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item me-3 me-lg-0">
+                            <a class="nav-link" href="{{ github }}" target="_blank">
+                                <i class="fab fa-github"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div id="intro" class="bg-image vh-100 shadow-1-strong">
+            <video style="min-width: 100%; min-height: 100%;" playsinline autoplay muted loop>
+                <source class="h-100" src="https://mdbootstrap.com/img/video/Lines.mp4" type="video/mp4"/>
+            </video>
+            <div class="mask"
+                 style="background: linear-gradient(45deg, rgba(29, 236, 197, 0.7), rgba(91, 14, 214, 0.7) 100% );">
+                <div class="container d-flex align-items-center justify-content-center text-center h-100">
+                    <div class="text-white">
+                        <h1 class="mb-3">Cybernetically Advanced Printer Monitoring System</h1>
+                        <a class="btn btn-outline-light btn-lg m-2" href="/locations" role="button">Locations</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="my-5" id="read_more">
+        <div class="container">
+            <section>
+                <div class="row">
+                    <div class="col-md-6 gx-5 mb-4">
+                        <h4><strong>For students, By students</strong></h4>
+                        <p class="text-muted">
+                            This project started out as a way to monitor printers at Bobst Library for IT student staff.
+                            Since then, it has since grown into a full fledged project with the goal of monitoring printers across NYU.
+                        </p>
+                    </div>
+                    <div class="col-md-6 gx-5 mb-4">
+                        <div class="bg-image shadow-1-strong rounded-5"
+                             data-mdb-ripple-color="light">
+                            <img src="{{ url_for('static', filename='image/apps.jpg') }}" class="img-fluid" alt=""/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!--Main layout-->
+{% endblock %}
