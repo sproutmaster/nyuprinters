@@ -17,6 +17,10 @@ class Location(db.Model):
         return f'<Location {self.id}, {self.name}>'
 
 
+def eastern_time(dt):
+    return dt.astimezone(timezone('US/Eastern')).strftime('%H:%M:%S, %a %d %b %Y') if dt else ''
+
+
 class Printer(db.Model):
     __tablename__ = 'printers'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -26,20 +30,21 @@ class Printer(db.Model):
     ip_address = db.Column(db.String(15), nullable=False)
     current_state = db.Column(db.Text)
     last_state = db.Column(db.Text)
-    last_online = db.Column(db.DateTime(timezone=True))
-    last_updated = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    last_online = db.Column(db.DateTime())
+    last_updated = db.Column(db.DateTime(), server_default=func.now(), onupdate=func.now())
     display = db.Column(db.Boolean, default=True)
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id', ondelete='CASCADE', onupdate='CASCADE'))
 
     @property
     def info(self):
         cur_state = json_loads(self.current_state) if self.current_state else ''
+        print(self.last_updated.astimezone(timezone('US/Eastern')))
         meta = {
             'id': self.id,
             'name': self.name,
             'location': self.location.short_name,
-            'last_online': self.last_online,
-            'last_updated': self.last_updated,
+            'last_online': eastern_time(self.last_online),
+            'last_updated': eastern_time(self.last_updated),
         }
 
         return {
