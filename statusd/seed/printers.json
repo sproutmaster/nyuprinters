@@ -43,7 +43,6 @@
     "response": {
       "status": "success",
       "message": {
-        "host": "10.0.69.12",
         "name": "Nofoundland Printer 2",
         "type": "grayscale",
         "model": "HP LaserJet M806",
