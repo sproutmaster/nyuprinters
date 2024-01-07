@@ -1,6 +1,8 @@
 Flask
-flask-oidc
-flask-mongoengine
+Flask-SQLAlchemy
+Flask-Migrate
+Flask-Script
+psycopg2-binary
 itsdangerous==2.0.1
 asgiref
 oauth2client~=4.1.3
