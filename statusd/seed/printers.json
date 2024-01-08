@@ -1,6 +1,7 @@
 [
   {
     "response": {
+      "status": "success",
       "message": {
         "name": "Nofoundland Printer 1",
         "type": "color",
@@ -35,12 +36,12 @@
       "ip": "10.0.69.11",
       "id": "1",
       "name": "Printer 1",
-      "serial": "SSSS1111",
-      "status": "success"
+      "serial": "SSSS1111"
     }
   },
   {
     "response": {
+      "status": "success",
       "message": {
         "name": "Nofoundland Printer 2",
         "type": "grayscale",
@@ -92,12 +93,12 @@
       "ip": "10.0.69.12",
       "id": "2",
       "name": "Printer 2",
-      "serial": "SSSS2222",
-      "status": "success"
+      "serial": "SSSS2222"
     }
   },
   {
     "response": {
+      "status": "success",
       "message": {
         "name": "Nofoundland Printer 3",
         "type": "grayscale",
@@ -148,24 +149,24 @@
       "ip": "10.0.69.13",
       "id": "3",
       "name": "Printer 3",
-      "serial": "SSSS3333",
-      "status": "success"
+      "serial": "SSSS3333"
     }
   },
   {
     "response": {
+      "status": "error",
       "message": "Printer unreachable"
     },
     "meta": {
       "ip": "10.0.69.14",
       "id": "4",
       "name": "Printer 4",
-      "serial": "SSSS4444",
-      "status": "error"
+      "serial": "SSSS4444"
     }
   },
   {
     "response": {
+      "status": "success",
       "message": {
         "name": "Nofoundland Printer 5",
         "type": "grayscale",
@@ -216,12 +217,12 @@
       "ip": "10.0.69.15",
       "id": "5",
       "name": "Printer 5",
-      "serial": "SSSS5555",
-      "status": "success"
+      "serial": "SSSS5555"
     }
   },
   {
     "response": {
+      "status": "success",
       "message": {
         "name": "Nofoundland Printer 6",
         "type": "color",
@@ -256,20 +257,19 @@
       "ip": "10.0.69.16",
       "id": "6",
       "name": "Printer 6",
-      "serial": "SSSS6666",
-      "status": "success"
+      "serial": "SSSS6666"
     }
   },
   {
     "response": {
+      "status": "error",
       "message": "Printer unreachable"
     },
     "meta": {
       "ip": "10.0.69.17",
       "id": "7",
       "name": "Printer 7",
-      "serial": "SSSS7777",
-      "status": "error"
+      "serial": "SSSS7777"
     }
   }
 ]
