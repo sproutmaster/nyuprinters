@@ -1,19 +1,28 @@
-from flask import Blueprint, render_template, send_from_directory, jsonify
-from models import Location, Printer
+from flask import Blueprint, render_template, send_from_directory, escape
+from app import env
 
-print_status = Blueprint('print_status', __name__, static_folder='static', template_folder='templates')
+index = Blueprint('index', __name__, static_folder='static', template_folder='templates')
 
 
-@print_status.route('/<string:loc>')
+@index.route('/')
+def home():
+    return render_template('index.html',
+                           github=env.github,
+                           discord=env.discord,
+                           default_loc=env.default_loc,
+                           )
+
+
+@index.route('/<string:loc>')
 def send_info_by_loc(loc):
-    location = Location.query.filter_by(short_name=loc).first()
-    if location is None:
-        return "Not found"
-    printers = Printer.query.filter_by(location_id=location.id).all()
-    resp = list(map(lambda x: x.info, printers))
-    return jsonify(resp)
+    loc = escape(loc)
+    return render_template('app.html',
+                           loc=loc,
+                           github=env.github,
+                           discord=env.discord,
+                           )
 
 
-@print_status.route('/icons/<path:path>')
+@index.route('/icons/<path:path>')
 def send_report(path):
-    return send_from_directory('static/print_status/icons', path)
+    return send_from_directory('static/icons', path)
