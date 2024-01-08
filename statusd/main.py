@@ -1,17 +1,12 @@
-from flask import render_template
-from views import print_status
+from views import index
+from api import api
 
 from app import create_app
 
 app = create_app()
 
-app.register_blueprint(print_status, url_prefix='/')
-
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
+app.register_blueprint(index, url_prefix='/')
+app.register_blueprint(api, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(debug=True)
