@@ -29,10 +29,10 @@ async def get_status(session: aiohttp.ClientSession, db, url: str, printer_id: i
         async with session.get(url, timeout=STATE['session_timeout']) as resp:
             res = json.loads(await resp.text())
             res.setdefault('meta', {})
-            res['meta']['id'] = printer_id
-            res['meta']['ip'] = res['request']['ip']
+            res['meta']['status'] = res['response']['status']
 
             # we move sensitive data from response and add to meta. Statusd can add/delete this data from meta
+            del res['response']['status']
             del res['request']
 
             cur = db.cursor()
@@ -42,11 +42,12 @@ async def get_status(session: aiohttp.ClientSession, db, url: str, printer_id: i
             current_state = cur.fetchone()[0]
             last_online = cur.fetchone()[1]
 
-            if res['response']['status'] == 'success':
+            if res['meta']['status'] == 'success':
                 res['meta']['serial'] = res['response']['message']['serial']
 
                 del res['response']['message']['host']
                 del res['response']['message']['serial']
+
                 last_online = datetime.now()
 
             cur.execute("INSERT INTO printers "
