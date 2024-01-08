@@ -7,16 +7,16 @@ help:
 .PHONY: run
 run: venv
 	@echo "### Running updated"
-	./.venv/bin/python3 main.py
+	./venv/bin/python3 main.py
 
 .PHONY: venv
 venv:
-	@if [ ! -d .venv ]; then \
+	@if [ ! -d venv ]; then \
   		echo "### Creating updated virtual environment"; \
-		$(PYTHON) -m venv .venv; \
-		./.venv/bin/python3 -m pip install --upgrade pip; \
-		./.venv/bin/pip install -r requirements.txt; \
-#		./.venv/bin/activate; \
+		$(PYTHON) -m venv venv; \
+		./venv/bin/python3 -m pip install --upgrade pip; \
+		./venv/bin/pip install -r requirements.txt; \
+#		./venv/bin/activate; \
 	fi
 
 .PHONY: req
@@ -27,4 +27,4 @@ requirements: venv
 .PHONY: clean
 clean:
 	@echo "### Deleting updated virtual environment"
-	rm -rf $$(find -name __pycache__) .venv
+	rm -rf $$(find -name __pycache__) venv
