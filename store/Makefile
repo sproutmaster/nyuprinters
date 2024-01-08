@@ -1,3 +1,7 @@
+help:
+	@echo '### Available make targets:'
+	@grep PHONY: Makefile | cut -d: -f2 | sed '1d;s/^/make/'
+
 .PHONY: run
 run:
 	@echo "### Starting DB services"
