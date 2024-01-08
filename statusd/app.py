@@ -29,6 +29,7 @@ class Env:
         self.discord = environ.get("DISCORD", default='#')
         self.github = environ.get("GITHUB", default='#')
         self.postgres_uri = environ.get("POSTGRES_URI", default="postgresql://admin:admin@localhost:5432/nyup")
+        self.default_loc = environ.get("DEFAULT_LOC", default="bobst")
 
 
 env = Env()
