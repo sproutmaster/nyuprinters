@@ -94,14 +94,14 @@ async def main():
         rows = cur.fetchall()
         cur.close()
 
-        # rows -> [(ip), (ip), ...]
+        # rows -> [(ip,), (ip,), ...]
 
         try:
             async with aiohttp.ClientSession() as session:
                 tasks = []
                 t = 0
                 for row in rows:
-                    tasks.append(asyncio.ensure_future(get_status(session, db, url, row[0], t)))
+                    tasks.append(asyncio.ensure_future(get_status(session, db, sourced_uri, row[0], t)))
                     t += STATE['delay']
                 await asyncio.gather(*tasks)
 

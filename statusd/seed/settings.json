@@ -26,5 +26,12 @@
     "default_value": "0",
     "type": "int",
     "description": "The delay in seconds given to sourced between requests to fetch data"
+  },
+    {
+    "key": "updated_constant_field_updates",
+    "value": "True",
+    "default_value": "False",
+    "type": "bool",
+    "description": "Weather or not to update the constant fields like serial, model, etc with every fetch"
   }
 ]
