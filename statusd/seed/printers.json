@@ -160,7 +160,8 @@
     "meta": {
       "ip": "10.0.69.14",
       "id": "4",
-      "name": "Printer 4"
+      "name": "Printer 4",
+      "serial": "SSSS4444"
     }
   },
   {
@@ -267,7 +268,8 @@
     "meta": {
       "ip": "10.0.69.17",
       "id": "7",
-      "name": "Printer 7"
+      "name": "Printer 7",
+      "serial": "SSSS7777"
     }
   }
 ]

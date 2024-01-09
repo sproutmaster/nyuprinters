@@ -43,18 +43,25 @@ with app.app_context():
 
 for raw_resp in printer_sample_data:
     resp = raw_resp['response']
-    message = resp['message']
-    meta = resp['meta']
-    printer = Printer(name=meta['name'],
-                      model=message['model'] if message.get('model') else None,
-                      serial=meta['serial'] if meta.get('serial') else None,
-                      ip_address=meta['ip'],
-                      current_state=json.dumps(resp),
-                      last_state=json.dumps(resp),
-                      last_online=func.now(),
-                      location=random.choice(locations)
-                      )
+    if resp.get('status') == 'success':
+        p = resp['message']
+        m = raw_resp['meta']
+        printer = Printer(name=m['name'],
+                          model=p['model'],
+                          serial=m['serial'],
+                          ip_address=m['ip'],
+                          current_state=json.dumps(p),
+                          last_state=json.dumps(p),
+                          last_online=func.now(),
+                          location=random.choice(locations)
+                          )
 
+    else:
+        resp = raw_resp['meta']
+        printer = Printer(name=f"Printer {resp['ip']}",
+                          ip_address=resp['ip'],
+                          location=random.choice(locations)
+                          )
 
     printers.append(printer)
 
