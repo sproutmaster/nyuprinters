@@ -1,5 +1,6 @@
 from os import environ
 from datetime import datetime
+from pytz import timezone
 import psycopg2
 import aiohttp
 import asyncio
@@ -11,50 +12,60 @@ STATE = {
     "refresh_interval": 0,  # updated_update_interval
     "session_timeout": 0,  # updated_try_timout
     "delay": 0,  # updated_try_delay_factor
+    "constant_field_updates": False,  # updated_constant_field_updates
 }
 
 
-async def get_status(session: aiohttp.ClientSession, db, url: str, printer_id: int, delay: int = 0) -> dict | None:
+async def get_status(session: aiohttp.ClientSession, db, sourced_uri: str, ip: str, delay: int = 0) -> dict | None:
     """
     Gets printer status from sourced
     :param session: session
     :param db: database connection
-    :param url: query url
-    :param printer_id: printer id
+    :param sourced_uri: sourced uri
+    :param ip: printer ip
     :param delay: delay to wait before sending request
     :return: response
     """
+    url = f'{sourced_uri}?ip={ip}'
     await asyncio.sleep(delay)
     try:
         async with session.get(url, timeout=STATE['session_timeout']) as resp:
-            res = json.loads(await resp.text())
-            res.setdefault('meta', {})
-            res['meta']['status'] = res['response']['status']
-
-            # we move sensitive data from response and add to meta. Statusd can add/delete this data from meta
-            del res['response']['status']
-            del res['request']
+            raw_resp = json.loads(await resp.text())
+            resp = raw_resp['response']
 
             cur = db.cursor()
+            cur.execute("SELECT current_state, last_state, last_online FROM printers WHERE ip_address = %s", (ip,))
 
-            # get current_state value from db
-            cur.execute("SELECT current_state, last_online FROM printers WHERE id = %s", (printer_id,))
             current_state = cur.fetchone()[0]
-            last_online = cur.fetchone()[1]
+            last_state = cur.fetchone()[1]
+            last_online = cur.fetchone()[2]
 
-            if res['meta']['status'] == 'success':
-                res['meta']['serial'] = res['response']['message']['serial']
+            if resp['status'] == 'success':
+                if STATE['constant_field_updates']:
+                    serial = resp['message']['serial']
+                    type_ = resp['message']['type']
+                    model = resp['message']['model']
+                    
+                    cur.execute("UPDATE printers SET "
+                                "serial = %s, type = %s, model = %s "
+                                "WHERE ip_address = %s",
+                                (serial, type_, model,
+                                 ip,))
 
-                del res['response']['message']['host']
-                del res['response']['message']['serial']
+                last_state = current_state
+                current_state = json.dumps(resp)
+                last_online = datetime.now(timezone('UTC'))
 
-                last_online = datetime.now()
+                del resp['message']['host']
+                del resp['message']['serial']
+                del resp['message']['model']
+                del resp['message']['type']
 
-            cur.execute("INSERT INTO printers "
-                        "(current_state, last_state, last_online, last_updated) VALUES (%s, %s) "
-                        "WHERE id = (%s)",
-                        (json.dumps(res), current_state, last_online, datetime.now(),
-                         printer_id,))
+            cur.execute("UPDATE printers SET "
+                        "current_state = %s, last_state =%s, last_online = %s "
+                        "WHERE ip_address = %s",
+                        (current_state, last_state, last_online,
+                         ip,))
 
             cur.close()
             db.commit()
@@ -79,18 +90,17 @@ async def main():
         Get all IP addresses from database and add data fetch task to queue. After getting the data, push it into db
         """
         cur = db.cursor()
-        cur.execute("SELECT id, ip_address FROM printers WHERE display = TRUE")
+        cur.execute("SELECT ip_address FROM printers WHERE display = TRUE")
         rows = cur.fetchall()
         cur.close()
 
-        # rows -> [(id, ip), (id, ip), ...]
+        # rows -> [(ip), (ip), ...]
 
         try:
             async with aiohttp.ClientSession() as session:
                 tasks = []
                 t = 0
                 for row in rows:
-                    url = f'{sourced_uri}?ip={row[1]}'
                     tasks.append(asyncio.ensure_future(get_status(session, db, url, row[0], t)))
                     t += STATE['delay']
                 await asyncio.gather(*tasks)
@@ -106,13 +116,14 @@ async def main():
         cur.execute("SELECT key, value FROM settings WHERE key like 'updated_%'")
         settings = dict(cur.fetchall())
         cur.close()
-        
+
         global STATE
         STATE = {
             "running": bool(settings['updated_run']),
             "refresh_interval": int(settings['updated_update_interval']),
             "session_timeout": int(settings['updated_try_timout']),
             "delay": int(settings['updated_try_delay_factor']),
+            "constant_field_updates": bool(settings['updated_constant_field_updates']),
         }
 
         print(f"Running: {STATE['running']}, Sleeping for: {STATE['refresh_interval']} sec")
