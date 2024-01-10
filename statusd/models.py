@@ -77,7 +77,7 @@ class Printer(db.Model):
 class Setting(db.Model):
     __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    key = db.Column(db.String(25), nullable=False, unique=True)
+    key = db.Column(db.String(40), nullable=False, unique=True)
     value = db.Column(db.Text)
     default_value = db.Column(db.Text)
     type = db.Column(db.String(10), nullable=False)
