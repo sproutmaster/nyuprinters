@@ -11,14 +11,18 @@ def home():
 
 @api.route('/locations')
 def get_locations():
-    locations = Location.query.all()
+    short_name = request.args.get('short_name')
+    if short_name is None or short_name == '':
+        locations = Location.query.all()
+    else:
+        locations = Location.query.filter_by(short_name=short_name)
     resp = list(map(lambda x: x.info, locations))
     return jsonify(resp)
 
 
 @api.route('/printers')
 def send_printers_by_loc():
-    short_name = escape(request.args.get('short_name'))
+    short_name = request.args.get('short_name')
     if short_name is None or short_name == '':
         return {'error': 'no location specified. Send GET param short_name=<location>'}
     location = Location.query.filter_by(short_name=short_name).first()
