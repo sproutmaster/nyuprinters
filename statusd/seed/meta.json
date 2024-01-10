@@ -105,6 +105,8 @@
       "id": 3,
       "name": "Printer 3",
       "serial": "SSSS3333",
+      "type": "grayscale",
+      "model": "HP LaserJet M806",
       "last_state": {
         "response": {
           "status": "success",
@@ -160,9 +162,6 @@
       "ip": "10.0.69.14",
       "id": 4,
       "name": "Printer 4",
-      "serial": "SSSS4444",
-      "type": "grayscale",
-      "model": "HP LaserJet M806",
       "last_state": {
         "response": {
           "status": "error",
