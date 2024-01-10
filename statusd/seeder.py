@@ -48,7 +48,7 @@ with app.app_context():
 with app.app_context():
     locations = Location.query.all()
 
-get_datetime = lambda t: datetime.now(timezone('UTC')) - timedelta(hours=random()*t)
+get_datetime = lambda t: datetime.now(timezone('UTC')) - timedelta(hours=(0.2+random())*t)
 
 for printer_resp, meta_resp in zip(printer_sample_data, meta_sample_data):
     p_resp = printer_resp['response']
