@@ -1,0 +1,316 @@
+[
+  {
+    "meta": {
+      "ip": "10.0.69.11",
+      "id": 1,
+      "name": "Printer 1",
+      "serial": "SSSS1111",
+      "type": "color",
+      "model": "HP Color LaserJet M651",
+      "last_state": {
+        "response": {
+          "status": "success",
+          "message": {
+            "name": "Nofoundland Printer 1",
+            "location": "",
+            "trays": {
+              "Tray 1": {
+                "status": "Empty",
+                "capacity": "100 sheets",
+                "size": "Any Size",
+                "type": "Any Type"
+              },
+              "Tray 2": {
+                "status": "OK",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              }
+            },
+            "supplies": {
+              "Yellow Cartridge": "100",
+              "Magenta Cartridge": "50",
+              "Cyan Cartridge": "30",
+              "Black Cartridge": "70",
+              "Fuser Kit": "10",
+              "Transfer Kit": "30"
+            },
+            "errors": []
+          }
+        }
+      }
+    }
+  },
+  {
+    "meta": {
+      "ip": "10.0.69.12",
+      "id": 2,
+      "name": "Printer 2",
+      "serial": "SSSS2222",
+      "type": "grayscale",
+      "model": "HP LaserJet M806",
+      "last_state": {
+        "response": {
+          "status": "success",
+          "message": {
+            "name": "Nofoundland Printer 2",
+            "location": "",
+            "trays": {
+              "Tray 1": {
+                "status": "Empty",
+                "capacity": "100 sheets",
+                "size": "Any Size",
+                "type": "Any Type"
+              },
+              "Tray 2": {
+                "status": "40 - 100",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              },
+              "Tray 3": {
+                "status": "40 - 100",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              },
+              "Tray 4": {
+                "status": "40 - 100",
+                "capacity": "1500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              },
+              "Tray 5": {
+                "status": "Empty",
+                "capacity": "2000 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              }
+            },
+            "supplies": {
+              "Black Cartridge": "90",
+              "Maintenance Kit": "70"
+            },
+            "errors": [
+              "Tray 5 empty: Plain, Letter"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "meta": {
+      "ip": "10.0.69.13",
+      "id": 3,
+      "name": "Printer 3",
+      "serial": "SSSS3333",
+      "last_state": {
+        "response": {
+          "status": "success",
+          "message": {
+            "name": "Nofoundland Printer 3",
+            "location": "",
+            "trays": {
+              "Tray 1": {
+                "status": "Empty",
+                "capacity": "100 sheets",
+                "size": "Any Size",
+                "type": "Any Type"
+              },
+              "Tray 2": {
+                "status": "40 - 100",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Any Type"
+              },
+              "Tray 3": {
+                "status": "40 - 100",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              },
+              "Tray 4": {
+                "status": "40 - 100",
+                "capacity": "1500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              },
+              "Tray 5": {
+                "status": "40 - 100",
+                "capacity": "2000 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              }
+            },
+            "supplies": {
+              "Black Cartridge": "90",
+              "Maintenance Kit": "40"
+            },
+            "errors": [
+              "Sleep mode on"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "meta": {
+      "ip": "10.0.69.14",
+      "id": 4,
+      "name": "Printer 4",
+      "serial": "SSSS4444",
+      "type": "grayscale",
+      "model": "HP LaserJet M806",
+      "last_state": {
+        "response": {
+          "status": "error",
+          "message": "Printer unreachable"
+        }
+      }
+    }
+  },
+  {
+    "meta": {
+      "ip": "10.0.69.15",
+      "id": 5,
+      "name": "Printer 5",
+      "serial": "SSSS5555",
+      "type": "grayscale",
+      "model": "HP LaserJet M806",
+      "last_state": {
+        "response": {
+          "status": "success",
+          "message": {
+            "name": "Nofoundland Printer 5",
+            "location": "",
+            "trays": {
+              "Tray 1": {
+                "status": "Empty",
+                "capacity": "100 sheets",
+                "size": "Any Size",
+                "type": "Any Type"
+              },
+              "Tray 2": {
+                "status": "40 - 100",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              },
+              "Tray 3": {
+                "status": "40 - 100",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              },
+              "Tray 4": {
+                "status": "40 - 100",
+                "capacity": "1500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              },
+              "Tray 5": {
+                "status": "20 - 40",
+                "capacity": "2000 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              }
+            },
+            "supplies": {
+              "Black Cartridge": "40",
+              "Maintenance Kit": "80"
+            },
+            "errors": [
+              "Sleep mode on"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "meta": {
+      "ip": "10.0.69.16",
+      "id": 6,
+      "name": "Printer 6",
+      "serial": "SSSS6666",
+      "type": "color",
+      "model": "HP Color LaserJet M651",
+      "last_satate": {
+        "response": {
+          "status": "success",
+          "message": {
+            "name": "Nofoundland Printer 6",
+            "location": "",
+            "trays": {
+              "Tray 1": {
+                "status": "Empty",
+                "capacity": "100 sheets",
+                "size": "Any Size",
+                "type": "Any Type"
+              },
+              "Tray 2": {
+                "status": "OK",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Any Type"
+              }
+            },
+            "supplies": {
+              "Yellow Cartridge": "90",
+              "Magenta Cartridge": "90",
+              "Cyan Cartridge": "90",
+              "Black Cartridge": "30",
+              "Fuser Kit": "50",
+              "Transfer Kit": "50"
+            },
+            "errors": []
+          }
+        }
+      }
+    }
+  },
+  {
+    "meta": {
+      "ip": "10.0.69.17",
+      "id": "7",
+      "name": "Printer 7",
+      "serial": "SSSS7777",
+      "type": "color",
+      "model": "HP Color LaserJet M651",
+      "last_state": {
+        "response": {
+          "status": "success",
+          "message": {
+            "name": "Nofoundland Printer 7",
+            "location": "",
+            "trays": {
+              "Tray 1": {
+                "status": "Empty",
+                "capacity": "100 sheets",
+                "size": "Any Size",
+                "type": "Any Type"
+              },
+              "Tray 2": {
+                "status": "OK",
+                "capacity": "500 sheets",
+                "size": "Letter",
+                "type": "Plain"
+              }
+            },
+            "supplies": {
+              "Yellow Cartridge": "90",
+              "Magenta Cartridge": "50",
+              "Cyan Cartridge": "30",
+              "Black Cartridge": "70",
+              "Fuser Kit": "10",
+              "Transfer Kit": "30"
+            },
+            "errors": []
+          }
+        }
+      }
+    }
+  }
+]
