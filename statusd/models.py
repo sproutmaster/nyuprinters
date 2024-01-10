@@ -47,27 +47,24 @@ class Printer(db.Model):
 
     @property
     def info(self, admin=False):
-        cur_state = json_loads(self.current_state) if self.current_state else {}
-        meta_from_state = cur_state.get('meta', {})
-
-        if cur_state.get('meta'):
-            del cur_state['meta']
-
-        if not admin and meta_from_state.get('status') == 'success':
-            del meta_from_state['serial']
-            del meta_from_state['ip']
+        cur_state = json_loads(self.current_state)
 
         meta = {
             'id': self.id,
             'name': self.name,
+            'model': self.model,
+            'type': self.type,
             'last_online': eastern_time(self.last_online),
             'last_updated': eastern_time(self.last_updated),
-            **meta_from_state,
         }
+
+        if admin:
+            meta['ip'] = self.ip_address
+            meta['serial'] = self.serial
 
         return {
             'meta': meta,
-            'data': cur_state,
+            'response': cur_state,
         }
 
     def __repr__(self):
