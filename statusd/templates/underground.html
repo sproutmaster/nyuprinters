@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}Underground{% endblock %}
+
+{% block body %}
+    {% if name %}
+        {% include "admin-dashboard.html" %}
+    {% else %}
+        {% include "login-modal.html" %}
+    {% endif %}
+
+    <!-- MDB -->
+    <script type="text/javascript" src="{{ url_for('static', filename='bootstrap/mdb.umd.min.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+<script>
+    $(document).ready(() => {
+        $("#login").modal('show');
+    });
+</script>
+<!-- Login -->
+<div class="modal fade" id="login" data-mdb-backdrop="static" data-mdb-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Login</h5>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/underground/auth">
+                    <!-- Netid input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input name="netid" type="text" id="netid" class="form-control"/>
+                        <label class="form-label" for="netid">NetID</label>
+                    </div>
+                    <!-- Password input -->
+                    <div data-mdb-input-init class="form-outline mb-4">
+                        <input name="password" type="password" id="password" class="form-control"/>
+                        <label class="form-label" for="password">Password</label>
+                    </div>
+                    <!-- Remember me -->
+                    <div class="row mb-4">
+                        <div class="col d-flex justify-content-center">
+                            <!-- Checkbox -->
+                            <div class="form-check">
+                                <input name="remember" class="form-check-input" type="checkbox" id="remember" checked/>
+                                <label class="form-check-label" for="remember"> Remember me </label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Submit button -->
+                    <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block">Authenticate
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

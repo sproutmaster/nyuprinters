@@ -5,8 +5,9 @@ import json
 from random import random, choice
 from datetime import datetime, timedelta
 from pytz import timezone
+from werkzeug.security import generate_password_hash
 
-from models import db, Location, Printer, Setting
+from models import db, Location, Printer, Setting, User
 from app import create_app
 
 app = create_app()
@@ -48,7 +49,7 @@ with app.app_context():
 with app.app_context():
     locations = Location.query.all()
 
-get_datetime = lambda t: datetime.now(timezone('UTC')) - timedelta(hours=(0.2+random())*t)
+get_datetime = lambda t: datetime.now(timezone('UTC')) - timedelta(hours=(0.2 + random()) * t)
 
 for printer_resp, meta_resp in zip(printer_sample_data, meta_sample_data):
     p_resp = printer_resp['response']
@@ -83,4 +84,13 @@ for pref in settings_sample_data:
 
 with app.app_context():
     db.session.add_all(settings)
+    db.session.commit()
+
+user = User(
+    netid='admin',
+    name='Potato',
+    password=generate_password_hash('admin', "pbkdf2:sha256")
+    )
+with app.app_context():
+    db.session.add(user)
     db.session.commit()

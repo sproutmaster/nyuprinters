@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 from sqlalchemy.sql import func
 from pytz import timezone
 from json import loads as json_loads
@@ -82,3 +83,11 @@ class Setting(db.Model):
 
     def __repr__(self):
         return f'<Setting {self.key}: {self.value}>'
+
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    netid = db.Column(db.String(15), unique=True)
+    password = db.Column(db.String(128))

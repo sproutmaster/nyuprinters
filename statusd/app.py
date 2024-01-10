@@ -18,10 +18,11 @@
 #########################################################################################
 
 from flask import Flask
+from flask_login import LoginManager
 from flask_migrate import Migrate
 from os import environ
 
-from models import db
+from models import db, User
 
 
 class Env:
@@ -30,6 +31,7 @@ class Env:
         self.github = environ.get("GITHUB", default='#')
         self.postgres_uri = environ.get("POSTGRES_URI", default="postgresql://admin:admin@localhost:5432/nyup")
         self.default_loc = environ.get("DEFAULT_LOC", default="bobst")
+        self.secret_key = environ.get("SECRET_KEY", default="not-a-secret")
 
 
 env = Env()
@@ -40,6 +42,17 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = env.postgres_uri
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ECHO"] = False
+    app.config['SECRET_KEY'] = env.secret_key
+
     db.init_app(app)
+
+    login_manager = LoginManager()
+    login_manager.login_view = "underground.underground_home"
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+
     Migrate(app, db)
     return app
