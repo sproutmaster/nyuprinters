@@ -2,16 +2,25 @@
   {
     "name": "Bobst Library",
     "short_name": "bobst",
-    "description": "70 Washington Square South between LaGuardia Place and the Schwartz pedestrian plaza, across from the southeast corner of Washington Square Park"
+    "description": "70 Washington Square South between LaGuardia Place and the Schwartz pedestrian plaza, across from the southeast corner of Washington Square Park",
+    "visible": true
   },
   {
     "name": "Dibner Library",
     "short_name": "dibner",
-    "description": "5 MetroTech Center, Brooklyn, NY 11201"
+    "description": "5 MetroTech Center, Brooklyn, NY 11201",
+    "visible": true
   },
   {
     "name": "370 Jay Street",
     "short_name": "370jay",
-    "description": "370 Jay Street, Brooklyn, NY 11201"
+    "description": "370 Jay Street, Brooklyn, NY 11201",
+    "visible": true
+  },
+  {
+    "name": "DEV",
+    "short_name": "dev",
+    "description": "For dev/testing purposes",
+    "visible": false
   }
 ]
