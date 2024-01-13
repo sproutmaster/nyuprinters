@@ -45,7 +45,7 @@ class Printer(db.Model):
     last_updated = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     display = db.Column(db.Boolean, default=True)
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id', ondelete='CASCADE', onupdate='CASCADE'))
-    comments = db.Column(db.Text)
+    comment = db.Column(db.Text)
 
     @property
     def info(self, admin=False):
