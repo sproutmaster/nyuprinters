@@ -34,11 +34,12 @@ printers = []
 locations = []
 settings = []
 
-for printer_resp in location_sample_data:
+for resp in location_sample_data:
     loc = Location(
-        name=printer_resp['name'],
-        short_name=printer_resp['short_name'],
-        description=printer_resp['description']
+        name=resp['name'],
+        short_name=resp['short_name'],
+        description=resp['description'],
+        visible=resp['visible'],
     )
     locations.append(loc)
 
@@ -56,6 +57,7 @@ for printer_resp, meta_resp in zip(printer_sample_data, meta_sample_data):
     m_resp = meta_resp['meta']
     printer = Printer(
         name=m_resp['name'],
+        brand=m_resp['brand'],
         model=m_resp.get('model'),
         type=m_resp.get('type'),
         serial=m_resp.get('serial'),
@@ -64,6 +66,7 @@ for printer_resp, meta_resp in zip(printer_sample_data, meta_sample_data):
         last_state=json.dumps({**m_resp.get('last_state', {})}),
         last_online=get_datetime(0) if p_resp['status'] == 'success' else get_datetime(24),
         location=choice(locations),
+        comment=m_resp.get('comment'),
     )
 
     printers.append(printer)
@@ -86,11 +89,21 @@ with app.app_context():
     db.session.add_all(settings)
     db.session.commit()
 
-user = User(
+user1 = User(
     netid='admin',
-    name='Potato',
-    password=generate_password_hash('admin', "pbkdf2:sha256")
+    name='Super User',
+    password=generate_password_hash('admin', "pbkdf2:sha256"),
+    type='superuser',
+    location=locations[0],
+    )
+user2 = User(
+    netid='user',
+    name='Standard User',
+    password=generate_password_hash('user', "pbkdf2:sha256"),
+    type='user',
+    location=choice(locations),
     )
 with app.app_context():
-    db.session.add(user)
+    db.session.add(user1)
+    db.session.add(user2)
     db.session.commit()
