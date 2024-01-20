@@ -4,9 +4,11 @@
       "ip": "10.0.69.11",
       "id": 1,
       "name": "Printer 1",
+      "brand": "HP",
       "serial": "SSSS1111",
       "type": "color",
       "model": "HP Color LaserJet M651",
+      "comment": "",
       "last_state": {
         "response": {
           "status": "success",
@@ -46,9 +48,11 @@
       "ip": "10.0.69.12",
       "id": 2,
       "name": "Printer 2",
+      "brand": "HP",
       "serial": "SSSS2222",
       "type": "grayscale",
       "model": "HP LaserJet M806",
+      "comment": "",
       "last_state": {
         "response": {
           "status": "success",
@@ -104,9 +108,11 @@
       "ip": "10.0.69.13",
       "id": 3,
       "name": "Printer 3",
+      "brand": "HP",
       "serial": "SSSS3333",
       "type": "grayscale",
       "model": "HP LaserJet M806",
+      "comment": "",
       "last_state": {
         "response": {
           "status": "success",
@@ -162,6 +168,9 @@
       "ip": "10.0.69.14",
       "id": 4,
       "name": "Printer 4",
+      "brand": "HP",
+      "type": "grayscale",
+      "comment": "",
       "last_state": {
         "response": {
           "status": "error",
@@ -175,9 +184,11 @@
       "ip": "10.0.69.15",
       "id": 5,
       "name": "Printer 5",
+      "brand": "HP",
       "serial": "SSSS5555",
       "type": "grayscale",
       "model": "HP LaserJet M806",
+      "comment": "",
       "last_state": {
         "response": {
           "status": "success",
@@ -233,9 +244,11 @@
       "ip": "10.0.69.16",
       "id": 6,
       "name": "Printer 6",
+      "brand": "HP",
       "serial": "SSSS6666",
       "type": "color",
       "model": "HP Color LaserJet M651",
+      "comment": "",
       "last_satate": {
         "response": {
           "status": "success",
@@ -275,9 +288,11 @@
       "ip": "10.0.69.17",
       "id": "7",
       "name": "Printer 7",
+      "brand": "HP",
       "serial": "SSSS7777",
       "type": "color",
       "model": "HP Color LaserJet M651",
+      "comment": "",
       "last_state": {
         "response": {
           "status": "success",
