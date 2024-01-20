@@ -14,6 +14,7 @@ class Location(db.Model):
     short_name = db.Column(db.String(20), nullable=False, unique=True)
     description = db.Column(db.Text)
     printers = db.relationship('Printer', backref=db.backref('location'))
+    visible = db.Column(db.Boolean, default=True)
 
     @property
     def info(self):
@@ -35,6 +36,7 @@ class Printer(db.Model):
     __tablename__ = 'printers'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(30), nullable=False)
+    brand = db.Column(db.String(30))
     model = db.Column(db.String(30))
     type = db.Column(db.String(10))
     serial = db.Column(db.String(30))
@@ -43,21 +45,31 @@ class Printer(db.Model):
     last_state = db.Column(db.Text)
     last_online = db.Column(db.DateTime(timezone=True))
     last_updated = db.Column(db.DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
-    display = db.Column(db.Boolean, default=True)
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id', ondelete='CASCADE', onupdate='CASCADE'))
     comment = db.Column(db.Text)
+    visible = db.Column(db.Boolean, default=True)
 
     @property
+    def status(self):
+        state = json_loads(self.current_state) if self.current_state else None
+        if state:
+            return 'Online' if state['status'] == 'success' else state.get('message')
+        return 'Provisioning'
+
     def info(self, admin=False):
-        cur_state = json_loads(self.current_state)
+        cur_state = json_loads(self.current_state) if self.current_state else {}
 
         meta = {
             'id': self.id,
             'name': self.name,
+            'brand': self.brand,
             'model': self.model,
             'type': self.type,
             'last_online': eastern_time(self.last_online),
             'last_updated': eastern_time(self.last_updated),
+            'location': self.location.short_name,
+            'comment': self.comment,
+            'visible': self.visible,
         }
 
         if admin:
