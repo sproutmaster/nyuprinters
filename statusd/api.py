@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, escape
-from models import db, Location, Printer
+from models import db, Location, Printer, Setting
 from flask_login import current_user
 from requests import get
 from app import env
@@ -14,25 +14,32 @@ def error_resp(message):
     }
 
 
+def success_resp(message):
+    return {
+        'status': 'success',
+        'message': message
+    }
+
+
 @api.route('/')
-def home():
-    return "Not Implemented", 501
-
-
-@api.route('/locations')
-def location_api():
-    short_name = request.args.get('short_name')
-    if short_name is None or short_name == '':
-        locations = Location.query.all() if current_user.is_authenticated else Location.query.filter_by(visible=True)
-    else:
-        locations = Location.query.filter_by(short_name=short_name)
-    resp = list(map(lambda x: x.info, locations))
-    return jsonify(resp)
+def api_index():
+    return {
+        'status': 'success',
+        'message': 'API is running',
+        'version': env.version,
+        'github': env.github,
+        'discord': env.discord,
+        'default_loc': env.default_loc,
+        'support_contact': env.support_contact,
+    }
 
 
 @api.route('/printers', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
-def printer_api():
+def printers_api():
     login = current_user.is_authenticated or request.headers.get('X-Apikey') == env.api_key
+    if request.method in ['PUT', 'PATCH', 'DELETE'] and not login:
+        return error_resp('Unauthorized')
+
     filters = {'visible': True} if not login else {}
 
     printer_id = request.args.get('printer_id', request.form.get('printer_id'))
@@ -46,9 +53,6 @@ def printer_api():
     comment = str(escape(request.form.get('comment', '')))
     visible = request.form.get('visible') == 'true'
 
-    if request.method in ['PUT', 'PATCH', 'DELETE'] and not login:
-        return error_resp('Unauthorized')
-
     req_args = []
     if request.method in ['PUT']:
         req_args = [name, brand, type, ip, location]
@@ -56,8 +60,6 @@ def printer_api():
         req_args = [printer_id, name, brand, type, ip, location]
     if request.method in ['DELETE']:
         req_args = [printer_id]
-
-    print(request.method, req_args)
 
     if not all(req_args):
         return error_resp(
@@ -100,7 +102,7 @@ def printer_api():
                           comment=comment, visible=visible)
         db.session.add(printer)
         db.session.commit()
-        return {'status': 'success', 'message': f'Printer {name} added'}
+        return success_resp(f'{name} added')
 
     # Update a printer in DB
     elif request.method == 'PATCH':
@@ -122,7 +124,7 @@ def printer_api():
         db.session.add(printer)
         db.session.commit()
 
-        return {'status': 'success', 'message': f'Printer {name} updated'}
+        return success_resp(f'{name} updated')
 
     # Delete a printer from DB
     elif request.method == 'DELETE':
@@ -132,4 +134,99 @@ def printer_api():
         db.session.delete(printer)
         db.session.commit()
 
-        return {'status': 'success', 'message': f'Printer {printer.name} deleted'}
+        return success_resp(f'{printer.name} deleted')
+
+
+@api.route('/locations', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
+def locations_api():
+    login = current_user.is_authenticated or request.headers.get('X-Apikey') == env.api_key
+    if request.method in ['PUT', 'PATCH', 'DELETE'] and not login:
+        return error_resp('Unauthorized')
+
+    filters = {'visible': True} if not login else {}
+
+    location_id = request.args.get('location_id', request.form.get('location_id'))
+    name = str(escape(request.form.get('name', '')))
+    short_name = str(escape(request.form.get('short_name', '')))
+    description = str(escape(request.form.get('description', '')))
+    visible = request.form.get('visible') == 'true'
+
+    req_args = []
+    if request.method in ['PUT']:
+        req_args = [name, short_name]
+    if request.method in ['PATCH']:
+        req_args = [location_id, name, short_name]
+    if request.method in ['DELETE']:
+        req_args = [location_id]
+
+    if not all(req_args):
+        return error_resp(
+            f'Missing required fields: {",".join([k for k, v in globals().items() if id(v) in map(id, req_args)])}')
+
+    # Get all locations, or a specific location
+    if request.method == 'GET':
+        if short_name is None or short_name == '':
+            locations = Location.query.filter_by(**filters)
+        else:
+            locations = Location.query.filter_by(short_name=short_name)
+        return jsonify(list(map(lambda x: x.info(), locations)))
+
+    # Add a location to DB
+    elif request.method == 'PUT':
+        if Location.query.filter_by(short_name=short_name).first():
+            return error_resp('Location already exists')
+
+        location = Location(name=name, short_name=short_name, description=description, visible=visible)
+        db.session.add(location)
+        db.session.commit()
+        return success_resp(f'{name} added')
+
+    # Update a location in DB
+    elif request.method == 'PATCH':
+        if not (location := Location.query.filter_by(id=int(location_id)).first()):
+            return error_resp('Invalid location_id')
+
+        location.name = name
+        location.short_name = short_name
+        location.description = description
+        location.visible = visible
+
+        db.session.add(location)
+        db.session.commit()
+
+        return success_resp(f'{name} updated')
+
+    # Delete a location from DB
+    elif request.method == 'DELETE':
+        if not (location := Location.query.filter_by(id=int(location_id)).first()):
+            return error_resp('Invalid location_id')
+
+        db.session.delete(location)
+        db.session.commit()
+
+        return success_resp(f'{location.name} deleted')
+
+
+@api.route('/settings', methods=['GET', 'PATCH'])
+def settings_api():
+    if not (current_user.is_authenticated or request.headers.get('X-Apikey') == env.api_key()):
+        return error_resp('Unauthorized')
+
+    key = request.form.get('key')
+    value = request.form.get('value')
+
+    if request.method == 'GET':
+        if key is None or key == '':
+            return jsonify(list(map(lambda x: x.info(), Setting.query.all())))
+        else:
+            if not (setting := Setting.query.filter_by(key=key).first()):
+                return error_resp('Invalid key')
+            return jsonify(setting.info())
+
+    elif request.method == 'PATCH':
+        if not (setting := Setting.query.filter_by(key=key).first()):
+            return error_resp('Invalid key')
+        setting.value = value
+        db.session.add(setting)
+        db.session.commit()
+        return success_resp(f'{key} updated')
