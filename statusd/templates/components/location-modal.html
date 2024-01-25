@@ -1,0 +1,40 @@
+<div>
+    <div class="modal fade" id="locationModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="locationModalTitle"></h5>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="mb-3">
+                            <label for="locationModalName" class="col-form-label text-light">Name *</label>
+                            <input type="text" class="form-control" id="locationModalName" name="name"
+                                   placeholder="Enter name (max 30 chars)"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="locationModalShort" class="col-form-label text-light">Short Name *</label>
+                            <input type="text" class="form-control" id="locationModalShort" name="short"
+                                   placeholder="Enter short name (max 20 chars)"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="locationModalDescription" class="col-form-label text-light">Description</label>
+                            <textarea class="form-control" id="locationModalDescription" name="description"></textarea>
+                        </div>
+                        <div class="form-check form-check-inline mb-4 m-lg-1">
+                            <input class="form-check-input" type="checkbox" id="locationModalVisible" name="visible"/>
+                            <label class="form-check-label" for="locationModalVisible">Visible to users</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init id="locationModalSubmit">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
