@@ -1,0 +1,55 @@
+<style>
+    .set-con {
+        display: grid;
+        grid-template-columns: 400px;
+        grid-template-rows: 25px;
+        grid-column-gap: 20px;
+        grid-row-gap: 30px;
+        justify-items: stretch;
+        align-items: stretch;
+    }
+
+    .set-item {
+        display: grid;
+        grid-template-columns: 350px 150px;
+        grid-template-rows: 25px;
+        grid-column-gap: 20px;
+    }
+
+</style>
+
+<div class="set-con">
+    <div class="set-item">
+        <label for="updated_run">Run System Services <sup>1</sup></label>
+        <input class="form-check-input" type="checkbox" id="updated_run">
+    </div>
+    <div class="set-item">
+        <label for="updated_update_interval">Status Update Interval <sup>2</sup></label>
+        <input class="form-control" type="number" id="updated_update_interval">
+    </div>
+    <div class="set-item">
+        <label for="updated_try_timout">Printer Response Timout <sup>3</sup></label>
+        <input class="form-control" type="number" id="updated_try_timout">
+    </div>
+    <div class="set-item">
+        <label for="updated_try_delay_factor">Request Delay Factor <sup>4</sup></label>
+        <input class="form-control" type="number" id="updated_try_delay_factor">
+    </div>
+    <div class="set-item">
+        <label for="updated_constant_field_updates">Request Delay Factor <sup>5</sup></label>
+        <input class="form-check-input" type="checkbox" id="updated_constant_field_updates">
+    </div>
+</div>
+
+<div style="margin-top: 25px;">
+    <button class="btn btn-primary" id="save_settings">Save</button>
+</div>
+
+<div class="container-fluid" style="margin-top: 30px;">
+    <i class="fas fa-circle-info"></i>
+    <div class="small"><i>1. Turn on/off system services. Printer status won't be updated when off</i></div>
+    <div class="small"><i>2. The interval (in seconds) between updates</i></div>
+    <div class="small"><i>3. The time (in seconds) to wait for a response from the printer before trying again</i></div>
+    <div class="small"><i>4. The time delay (in seconds) to add the fetch queue on every update cycle</i></div>
+    <div class="small"><i>5. If enabled, meta-data like type, model, serial are updated with updates to supplies. Enable this when a printer is replaced but maintains same IP</i></div>
+</div>
