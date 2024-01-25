@@ -147,7 +147,7 @@ def locations_api():
 
     location_id = request.args.get('location_id', request.form.get('location_id'))
     name = str(escape(request.form.get('name', '')))
-    short_name = str(escape(request.form.get('short_name', '')))
+    short_name = str(escape(request.form.get('short', '')))
     description = str(escape(request.form.get('description', '')))
     visible = request.form.get('visible') == 'true'
 
@@ -165,11 +165,15 @@ def locations_api():
 
     # Get all locations, or a specific location
     if request.method == 'GET':
-        if short_name is None or short_name == '':
-            locations = Location.query.filter_by(**filters)
+        if location_id:
+            locations = Location.query.filter_by(id=location_id, **filters).first()
+            return jsonify(locations.info())
+        elif short_name:
+            locations = Location.query.filter_by(short_name=short_name, **filters).first()
+            return jsonify(locations.info())
         else:
-            locations = Location.query.filter_by(short_name=short_name)
-        return jsonify(list(map(lambda x: x.info(), locations)))
+            locations = Location.query.filter_by(**filters)
+            return jsonify(list(map(lambda x: x.info(), locations)))
 
     # Add a location to DB
     elif request.method == 'PUT':
@@ -186,6 +190,10 @@ def locations_api():
         if not (location := Location.query.filter_by(id=int(location_id)).first()):
             return error_resp('Invalid location_id')
 
+        if existing_loc := Location.query.filter_by(short_name=short_name).first():
+            if existing_loc.short_name != location.short_name:
+                return error_resp('Location already exists')
+
         location.name = name
         location.short_name = short_name
         location.description = description
@@ -201,6 +209,15 @@ def locations_api():
         if not (location := Location.query.filter_by(id=int(location_id)).first()):
             return error_resp('Invalid location_id')
 
+        if location.short_name == 'dev':
+            return error_resp('Cannot delete this location')
+
+        dev_loc = Location.query.filter_by(short_name='dev').first()
+
+        for printer in location.printers:
+            printer.location = dev_loc
+
+        db.session.add_all(location.printers)
         db.session.delete(location)
         db.session.commit()
 
@@ -212,11 +229,11 @@ def settings_api():
     if not (current_user.is_authenticated or request.headers.get('X-Apikey') == env.api_key()):
         return error_resp('Unauthorized')
 
-    key = request.form.get('key')
-    value = request.form.get('value')
+    key = str(escape(request.form.get('key', '')))
+    value = str(escape(request.form.get('value', '')))
 
     if request.method == 'GET':
-        if key is None or key == '':
+        if key == '':
             return jsonify(list(map(lambda x: x.info(), Setting.query.all())))
         else:
             if not (setting := Setting.query.filter_by(key=key).first()):
