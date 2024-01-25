@@ -14,14 +14,16 @@ class Location(db.Model):
     short_name = db.Column(db.String(20), nullable=False, unique=True)
     description = db.Column(db.Text)
     printers = db.relationship('Printer', backref=db.backref('location'))
-    visible = db.Column(db.Boolean, default=True)
+    visible = db.Column(db.Boolean, default=False)
 
-    @property
     def info(self):
         return {
+            'id': self.id,
             'name': self.name,
-            'short_name': self.short_name,
+            'short': self.short_name,
             'description': self.description,
+            'printer_count': len(self.printers),
+            'visible': self.visible,
         }
 
     def __repr__(self):
@@ -93,6 +95,15 @@ class Setting(db.Model):
     default_value = db.Column(db.Text)
     type = db.Column(db.String(10), nullable=False)
     description = db.Column(db.Text)
+
+    def info(self):
+        return {
+            'key': self.key,
+            'value': self.value,
+            'default_value': self.default_value,
+            'type': self.type,
+            'description': self.description,
+        }
 
     def __repr__(self):
         return f'<Setting {self.key}: {self.value}>'
