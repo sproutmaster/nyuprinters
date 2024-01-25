@@ -1,0 +1,72 @@
+{% set locs=locs %}
+<header>
+    <!-- Sidebar -->
+    {% include 'components/sidebar.html' %}
+    <!-- Navbar -->
+    {% include 'components/navbar.html' %}
+</header>
+<!--Main Navigation-->
+
+<!--Main layout-->
+<main style="margin-top: 58px; margin-left: 10px;">
+    <!--PRINTER MODAL-->
+    {% include 'components/printer-modal.html' %}
+    <!--PRINTER DELETE MODAL-->
+    {% include 'components/delete-confirmation-modal.html' %}
+
+    <div class="container-fluid pt-4 mx-lg-auto" id="printersContainer">
+        <div class="row">
+            <h1 class="col-sm-8">Printers</h1>
+            <button type="button"
+                    class="btn btn-primary col-sm-2 m-lg-auto"
+                    style="width: 150px; height: 40px" data-mdb-ripple-init data-mdb-modal-init
+                    data-mdb-target="#printerModal"
+                    data-message="Add Printer"
+                    data-action="add_printer"
+            >
+                Add Printer
+            </button>
+        </div>
+        <div class="border p-4 m-1">
+            {% include 'components/accordians.html' %}
+        </div>
+    </div>
+
+    <div class="container-fluid pt-4 _hidden" id="locationsContainer">
+        <div class="row">
+            <h1 class="col-sm-8">Locations</h1>
+            <button type="button"
+                    class="btn btn-primary col-sm-2 m-lg-auto"
+                    style="width: 150px; height: 40px" data-mdb-ripple-init data-mdb-modal-init
+                    data-mdb-target="#locationModal"
+                    data-message="Add Location"
+                    data-action="add_location"
+            >
+                Add Location
+            </button>
+        </div>
+        <div class="border p-4 m-1">
+            {% include 'components/locations-table.html' %}
+            {% include 'components/location-modal.html' %}
+        </div>
+    </div>
+    <div class="container-fluid pt-4 _hidden" id="settingsContainer">
+        <div class="row">
+            <h1 class="col-sm-8">Settings</h1>
+            <button type="button"
+                    class="btn btn-primary col-sm-2 m-lg-auto"
+                    style="width: 150px; height: 40px" data-mdb-ripple-init data-mdb-modal-init
+                    data-mdb-target="#settingModal"
+            >
+                Reset Default
+            </button>
+        </div>
+        <div class="border p-4 m-1">
+            {% include 'components/settings.html' %}
+        </div>
+    </div>
+    <div class="container-fluid pt-4 _hidden" id="usersContainer"></div>
+    <div class="container-fluid pt-4 _hidden" id="profileContainer"></div>
+    <div class="container-fluid pt-4 _hidden" id="aboutContainer"></div>
+
+</main>
