@@ -43,8 +43,8 @@ def underground_auth():
     # For getting user info
     if request.method == 'GET':
         if current_user.is_authenticated:
-            return jsonify({'netid': current_user.netid, 'name': current_user.name})
-        return {'netid': None, 'name': None}
+            return jsonify({'netid': current_user.netid, 'name': current_user.name, 'type': current_user.type})
+        return jsonify({'netid': None, 'name': None, 'type': None})
 
     # For logging in
     elif request.method == 'POST':
@@ -55,36 +55,3 @@ def underground_auth():
         if user and check_password_hash(user.password, password):
             login_user(user, remember=remember)
         return redirect(url_for('underground.underground_home'))
-
-    # For adding user
-    elif request.method == 'PUT':
-        if current_user.is_authenticated:
-            netid = escape(request.form.get('netid'))
-            name = escape(request.form.get('name'))
-            password = request.form.get('password')
-            users = User.query.all(netid=netid)
-            if users:
-                return jsonify(error_resp('User already exists'))
-            user = User(
-                netid=netid,
-                name=name,
-                password=generate_password_hash(password, method='pbkdf2:sha256')
-            )
-            db.add(user)
-            db.commit()
-            return jsonify({'status': 'success', 'message': 'User added'})
-        return jsonify(error_resp('Unauthorized'))
-
-    # For changing info
-    elif request.method == 'PATCH':
-        if current_user.is_authenticated:
-            name = request.form.get('name')
-            old_password = request.form.get('old_password')
-            password = request.form.get('password')
-            if check_password_hash(current_user.password, old_password):
-                user = User.query.filter_by(netid=current_user.netid).first()
-                user.name = name
-                user.password = generate_password_hash(password, method='pbkdf2:sha256')
-                db.commit()
-                return jsonify({'status': 'success', 'message': 'User info changed'})
-        return jsonify(error_resp('Unauthorized'))
