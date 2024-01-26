@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import env
 from models import db, Location, User
+from api import error_resp
 
 index = Blueprint('index', __name__, static_folder='static', template_folder='templates')
 underground = Blueprint('underground', __name__, static_folder='static', template_folder='templates')
@@ -32,10 +33,9 @@ def send_info_by_loc(loc):
 
 @underground.route('/')
 def underground_home():
-    print(current_user.is_authenticated)
-    if current_user.is_authenticated:
-        return render_template('underground.html', name=current_user.name)
-    return render_template('underground.html')
+    login = current_user.is_authenticated
+    locations = Location.query.all() if login else []
+    return render_template('underground.html', locs=locations, login=login, footer=False)
 
 
 @underground.route('/auth', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
@@ -45,7 +45,7 @@ def underground_auth():
         if current_user.is_authenticated:
             return jsonify({'netid': current_user.netid, 'name': current_user.name})
         return {'netid': None, 'name': None}
-    
+
     # For logging in
     elif request.method == 'POST':
         netid = request.form.get('netid')
@@ -55,7 +55,7 @@ def underground_auth():
         if user and check_password_hash(user.password, password):
             login_user(user, remember=remember)
         return redirect(url_for('underground.underground_home'))
-    
+
     # For adding user
     elif request.method == 'PUT':
         if current_user.is_authenticated:
@@ -64,7 +64,7 @@ def underground_auth():
             password = request.form.get('password')
             users = User.query.all(netid=netid)
             if users:
-                return {'status': 'error', 'message': 'User already exists'}
+                return jsonify(error_resp('User already exists'))
             user = User(
                 netid=netid,
                 name=name,
@@ -72,7 +72,8 @@ def underground_auth():
             )
             db.add(user)
             db.commit()
-            return {'status': 'success'}
+            return jsonify({'status': 'success', 'message': 'User added'})
+        return jsonify(error_resp('Unauthorized'))
 
     # For changing info
     elif request.method == 'PATCH':
@@ -85,5 +86,5 @@ def underground_auth():
                 user.name = name
                 user.password = generate_password_hash(password, method='pbkdf2:sha256')
                 db.commit()
-                return jsonify({'status': 'success'})
-        return jsonify({'status': 'error'})
+                return jsonify({'status': 'success', 'message': 'User info changed'})
+        return jsonify(error_resp('Unauthorized'))
