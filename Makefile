@@ -33,6 +33,15 @@ seed:
 	sleep 3
 	$(MAKE) -C statusd seed
 
+.PHONY: stop
+stop:
+	@echo "### stopping all services"
+	$(MAKE) -C store stop
+
+.INTERRUPT:
+	@$(MAKE) stop
+	@exit 1
+
 .PHONY: clean
 clean:
 	$(MAKE) -C sourced clean
