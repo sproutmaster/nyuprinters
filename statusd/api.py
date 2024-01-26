@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request, escape
-from models import db, Location, Printer, Setting
+from models import db, Location, Printer, Setting, User
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user
 from requests import get
 from app import env
@@ -276,3 +277,38 @@ def settings_api():
             return success_resp('Settings reset to default')
         else:
             return error_resp('Invalid request')
+
+
+@api.route('/users', methods=['GET', 'PUT', 'PATCH', 'DELETE'])
+def users_api():
+    if not request.headers.get('X-Apikey') == env.api_key:
+        if not current_user.is_authenticated:
+            return error_resp('Unauthenticated')
+
+        if not current_user.type == 'superuser':
+            return error_resp('Unauthorized')
+
+    # For getting user info
+    if request.method == 'GET':
+        users = User.query.all()
+        return jsonify(list(map(lambda x: x.info(), users)))
+
+    # For adding user
+    elif request.method == 'PUT':
+        netid = str(escape(request.form.get('netid', '')))
+        name = str(escape(request.form.get('name', '')))
+        password = request.form.get('password')
+        user_type = str(escape(request.form.get('type', 'user')))
+        user = User.query.all(netid=netid).first()
+        if user:
+            return jsonify(error_resp('User already exists'))
+        user = User(
+            netid=netid,
+            name=name,
+            password=generate_password_hash(password, method='pbkdf2:sha256'),
+            user_type=user_type,
+        )
+        db.sessin.add(user)
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': f'{name} added'})
+
