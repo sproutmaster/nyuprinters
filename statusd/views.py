@@ -55,3 +55,17 @@ def underground_auth():
         if user and check_password_hash(user.password, password):
             login_user(user, remember=remember)
         return redirect(url_for('underground.underground_home'))
+
+    elif request.method == 'PATCH':
+        if current_user.is_authenticated:
+            name = str(escape(request.form.get('name', 'Anonymouse')))
+            old_password = request.form.get('old_password')
+            password = request.form.get('new_password')
+            if check_password_hash(current_user.password, old_password):
+                user = User.query.filter_by(netid=current_user.netid).first()
+                user.name = name
+                user.password = generate_password_hash(password, method='pbkdf2:sha256')
+                db.session.add(user)
+                db.session.commit()
+                return jsonify({'status': 'success', 'message': 'Info updated'})
+        return jsonify(error_resp('Unauthorized'))
