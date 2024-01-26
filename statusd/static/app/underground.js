@@ -376,8 +376,3 @@ function fill_locations_table() {
         }
     });
 }
-
-
-function fill_settings() {
-    $('')
-}

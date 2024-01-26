@@ -1,0 +1,73 @@
+<div class="accordion" id="printersAccordian">
+    {% for location in locs %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOneY">
+                <button data-mdb-collapse-init class="accordion-button collapsed text-light" type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#loc-{{ location.short_name }}">
+                    <i class="fas fa-location-arrow fa-sm me-2 opacity-70"></i>
+                    {{ location.name }}
+                </button>
+            </h2>
+            <div id="loc-{{ location.short_name }}" class="accordion-collapse collapse hide"
+                 data-mdb-parent="#printersAccordian">
+                <div class="accordion-body">
+                    <table class="table align-middle table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Model</th>
+                            <th scope="col">Comment</th>
+                            <th scope="col">Status</th>
+                            <th scope="col"><span style="padding-left: 15px">Actions</span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for printer in location.printers %}
+                            <tr>
+                                <th scope="row"><a href="https://{{ printer.ip_address }}"
+                                                   target="_blank">{{ printer.name }}</a></th>
+                                <td>{{ printer.model }}</td>
+                                <td>
+                                    {{ printer.comment }}
+                                </td>
+                                {% if printer.status == "Online" %}
+                                    {% set class_ = "bg-success" %}
+                                {% elif printer.status == "Provisioning" %}
+                                    {% set class_ = "bg-warning" %}
+                                {% else %}
+                                    {% set class_ = "bg-danger" %}
+                                {% endif %}
+                                <td><span class="badge {{ class_ }} rounded-pill d-inline">{{ printer.status }}</span>
+                                </td>
+                                <td>
+                                    <div>
+                                        <button type="button" class="btn btn-link btn-sm" style="margin-right: -3px"
+                                                data-mdb-modal-init
+                                                data-mdb-target="#printerModal"
+                                                data-action="edit_printer"
+                                                data-message="Edit Printer"
+                                                data-printer-id="{{ printer.id }}"
+                                        >
+                                            <i class="fas fa-pencil"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-link btn-sm" style="margin-left: -3px"
+                                                data-mdb-modal-init
+                                                data-mdb-target="#deleteModal"
+                                                data-action="delete_printer"
+                                                data-printer-name="{{ printer.name }}"
+                                                data-printer-id="{{ printer.id }}"
+                                        >
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

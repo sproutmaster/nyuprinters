@@ -1,0 +1,89 @@
+{% set hide_footer=hide_footer %}
+{% extends "layout.html" %}
+
+{% block title %}{% endblock %}
+
+{% block imports %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='/app/styles.css') }}"/>
+    <script type="text/javascript" src="{{ url_for('static', filename='app/script.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container my-5">
+        <section>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Zelos</a>
+                    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarColor02"
+                            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarColor02">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item active">
+                                <a class="nav-link" aria-current="page" href="#">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#print-status">Print Status</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">Files</a>
+                            </li>
+                        </ul>
+
+                        <ul class="navbar-nav d-flex flex-row">
+                            <!-- icons -->
+                            <li class="nav-item me-3 me-lg-0">
+                                <a class="nav-link" href="#">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </li>
+
+                            <!-- Icon dropdown -->
+
+                            <li class="nav-item me-3 me-lg-0 dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                        data-mdb-toggle="dropdown"
+                                        aria-expanded="false">
+                                    <i class="fas fa-user"></i>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#">Action</a></li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider"/>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </section>
+
+        <section id="filter-menu">
+            <div class="filters">
+            </div>
+            <div class="view-settings">
+                <img src="icons/grid.svg" alt="grid-view-icon">
+                <div class="form-check form-switch">
+                    <input class="form-check-input " checked type="checkbox" role="switch" id="flexSwitchCheckDefault"/>
+                </div>
+                <img src="icons/list.svg" alt="list-view-icon">
+            </div>
+        </section>
+
+        <section id="print-status" class="print-status">
+            <div class="container">
+
+            </div>
+
+        </section>
+
+    </div>
+{% endblock %}

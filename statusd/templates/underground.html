@@ -1,12 +1,21 @@
 {% extends "layout.html" %}
 
+{% set hide_footer= not footer %}
+{% set locs = locs %}
+
 {% block title %}Underground{% endblock %}
+{% if login %}
+    {% block imports %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='app/underground.css') }}"/>
+        <script type="text/javascript" src="{{ url_for('static', filename='app/underground.js') }}"></script>
+    {% endblock %}
+{% endif %}
 
 {% block body %}
-    {% if name %}
-        {% include "admin-dashboard.html" %}
+    {% if login %}
+        {% include "components/admin-dashboard.html" %}
     {% else %}
-        {% include "login-modal.html" %}
+        {% include "components/login-modal.html" %}
     {% endif %}
 
     <!-- MDB -->
