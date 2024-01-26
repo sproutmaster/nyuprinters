@@ -42,7 +42,7 @@
 </div>
 
 <div style="margin-top: 25px;">
-    <button class="btn btn-primary" id="save_settings">Save</button>
+    <button class="btn btn-primary" id="save_settings" disabled>Save</button>
 </div>
 
 <div class="container-fluid" style="margin-top: 30px;">
@@ -51,5 +51,69 @@
     <div class="small"><i>2. The interval (in seconds) between updates</i></div>
     <div class="small"><i>3. The time (in seconds) to wait for a response from the printer before trying again</i></div>
     <div class="small"><i>4. The time delay (in seconds) to add the fetch queue on every update cycle</i></div>
-    <div class="small"><i>5. If enabled, meta-data like type, model, serial are updated with updates to supplies. Enable this when a printer is replaced but maintains same IP</i></div>
+    <div class="small"><i>5. If enabled, meta-data like type, model, serial are updated with updates to supplies. Enable
+        this when a printer is replaced but maintains same IP</i></div>
 </div>
+
+<script>
+
+    let originalValues = {};
+    let currentValues = {};
+    function fill_settings() {
+        // Get the current settings
+        originalValues = {};
+        $.ajax({
+            url: '/api/settings',
+            type: 'GET',
+            success: function (data) {
+                data.forEach((item) => {
+                    if (item.type === 'int') {
+                        originalValues[item.key] = item.value;
+                        $(`#${item.key}`).val(item.value);
+                    }
+                    else if (item.type === 'bool') {
+                        originalValues[item.key] = item.value === 'True';
+                        $(`#${item.key}`).prop('checked', item.value === 'True');
+                    }
+                });
+                currentValues = {...originalValues};
+            }
+        });
+    }
+
+    // Enable the "Save" button when there are changes
+    $('.set-con input').on('input', function () {
+        currentValues[$(this).attr('id')] = ($(this).is(':checkbox')) ? $(this).prop('checked'): $(this).val()
+        $('#save_settings').prop('disabled', Object.entries(currentValues).toString() === Object.entries(originalValues).toString());
+    });
+
+    // Save the settings
+    $('#save_settings').on('click', function () {
+        $.ajax({
+            url: '/api/settings',
+            type: 'PATCH',
+            data: {
+                settings : JSON.stringify(currentValues),
+            },
+            success: function (data) {
+                setTimeout(fill_settings, 500);
+                $('#save_settings').prop('disabled', true);
+            }
+        });
+    });
+
+    $('#settingsReset').on('click', function () {
+        $.ajax({
+            url: '/api/settings',
+            type: 'POST',
+            data: {
+                reset : true,
+            },
+            success: function (data) {
+                setTimeout(fill_settings, 500);
+                $('#save_settings').prop('disabled', true);
+            }
+        });
+    });
+
+</script>
