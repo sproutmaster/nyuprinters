@@ -1,5 +1,11 @@
 [
   {
+    "name": "DEV",
+    "short_name": "dev",
+    "description": "For dev/testing purposes",
+    "visible": false
+  },
+  {
     "name": "Bobst Library",
     "short_name": "bobst",
     "description": "70 Washington Square South between LaGuardia Place and the Schwartz pedestrian plaza, across from the southeast corner of Washington Square Park",
@@ -16,11 +22,5 @@
     "short_name": "370jay",
     "description": "370 Jay Street, Brooklyn, NY 11201",
     "visible": true
-  },
-  {
-    "name": "DEV",
-    "short_name": "dev",
-    "description": "For dev/testing purposes",
-    "visible": false
   }
 ]
