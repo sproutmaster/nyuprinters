@@ -3,6 +3,7 @@ from models import db, Location, Printer, Setting
 from flask_login import current_user
 from requests import get
 from app import env
+from json import loads as json_parse
 
 api = Blueprint('api', __name__, static_folder='static', template_folder='templates')
 
@@ -224,26 +225,54 @@ def locations_api():
         return success_resp(f'{location.name} deleted')
 
 
-@api.route('/settings', methods=['GET', 'PATCH'])
+@api.route('/settings', methods=['GET', 'POST', 'PATCH'])
 def settings_api():
     if not (current_user.is_authenticated or request.headers.get('X-Apikey') == env.api_key()):
         return error_resp('Unauthorized')
 
-    key = str(escape(request.form.get('key', '')))
+    key = str(escape(request.form.get('key', request.args.get('key', ''))))
     value = str(escape(request.form.get('value', '')))
+    key_value = request.form.get('settings', '')
 
+    print(key_value)
+
+    # Get all settings, or a specific setting
     if request.method == 'GET':
-        if key == '':
+        if not key:
             return jsonify(list(map(lambda x: x.info(), Setting.query.all())))
         else:
-            if not (setting := Setting.query.filter_by(key=key).first()):
+            if not (setting := Setting.query.filter_by(key=key)):
                 return error_resp('Invalid key')
-            return jsonify(setting.info())
+            return jsonify(setting.first().info())
 
+    # Update a setting
     elif request.method == 'PATCH':
-        if not (setting := Setting.query.filter_by(key=key).first()):
+        if key_value:
+            key_value = json_parse(key_value)
+            for k, v in key_value.items():
+                if not (setting := Setting.query.filter_by(key=k).first()):
+                    return error_resp('Invalid key')
+                setting.value = str(escape(v)) if v else setting.default_value
+                db.session.add(setting)
+            db.session.commit()
+            return success_resp('Settings updated')
+
+        elif not (setting := Setting.query.filter_by(key=key).first()):
             return error_resp('Invalid key')
-        setting.value = value
+
+        setting.value = value if value else setting.default_value
         db.session.add(setting)
         db.session.commit()
         return success_resp(f'{key} updated')
+
+    # Reset settings to default
+    elif request.method == 'POST':
+        reset = request.form.get('reset', False)
+        if reset:
+            for setting in Setting.query.all():
+                setting.value = setting.default_value
+                db.session.add(setting)
+            db.session.commit()
+            return success_resp('Settings reset to default')
+        else:
+            return error_resp('Invalid request')
