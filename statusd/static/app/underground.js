@@ -39,8 +39,7 @@ $(document).ready(function () {
         if (button.data('action') === 'add_location') {
             locationAction = 'add_location';
             modalLocationTitle.text('Add Location');
-        }
-        else {
+        } else {
             modalLocationTitle.text('Edit Location');
             locationAction = 'edit_location';
             $.ajax({
@@ -70,8 +69,7 @@ $(document).ready(function () {
 
         if (locationAction === 'add_location') {
             location_actions('PUT', 0, modalLocationName.val(), modalLocationShort.val(), modalLocationDescription.val(), modalLocationVisible.is(":checked"));
-        }
-        else if (locationAction === 'edit_location') {
+        } else if (locationAction === 'edit_location') {
             location_actions('PATCH', current_location_id, modalLocationName.val(), modalLocationShort.val(), modalLocationDescription.val(), modalLocationVisible.is(":checked"));
         }
         modalLocation.modal('hide');
@@ -127,7 +125,7 @@ $(document).ready(function () {
     $(document).on('show.bs.modal', '#printerModal', function (e) {
         const button = $(e.relatedTarget); // Button that triggered the modal
         current_printer_id = button.data('printer-id');
-         // Add title to modal
+        // Add title to modal
         if (button.data('action') === 'add_printer') {
             addPrinterMode = true;
             modalPrinterTitle.text('Add Printer');
@@ -286,6 +284,20 @@ $(document).ready(function () {
             });
         }
     }
+
+    $('#settingsReset').on('click', function () {
+        $.ajax({
+            url: '/api/settings',
+            type: 'POST',
+            data: {
+                reset: true,
+            },
+            success: function (data) {
+                setTimeout(fill_settings, 500);
+                $('#save_settings').prop('disabled', true);
+            }
+        });
+    });
 });
 
 function isValidIP(str) {
