@@ -1,4 +1,5 @@
 {% set locs=locs %}
+{% set superuser=superuser %}
 <header>
     <!-- Sidebar -->
     {% include 'components/sidebar.html' %}
@@ -13,13 +14,24 @@
     {% include 'components/printer-modal.html' %}
     <!--PRINTER DELETE MODAL-->
     {% include 'components/delete-confirmation-modal.html' %}
+    <style>
+        .header {
+            display: flex;
+            justify-content: space-between;
+        }
+        .action_button{
+            max-width: 150px;
+            max-height: 40px;
+            margin-right: 5px;
+        }
+    </style>
 
     <div class="container-fluid pt-4 mx-lg-auto" id="printersContainer">
-        <div class="row">
-            <h1 class="col-sm-8">Printers</h1>
+        <div class="header">
+            <h1 class="title">Printers</h1>
             <button type="button"
-                    class="btn btn-primary col-sm-2 m-lg-auto"
-                    style="width: 150px; height: 40px" data-mdb-ripple-init data-mdb-modal-init
+                    class="btn btn-primary action_button"
+                    data-mdb-ripple-init data-mdb-modal-init
                     data-mdb-target="#printerModal"
                     data-message="Add Printer"
                     data-action="add_printer"
@@ -33,11 +45,11 @@
     </div>
 
     <div class="container-fluid pt-4 _hidden" id="locationsContainer">
-        <div class="row">
+        <div class="header">
             <h1 class="col-sm-8">Locations</h1>
             <button type="button"
-                    class="btn btn-primary col-sm-2 m-lg-auto"
-                    style="width: 150px; height: 40px" data-mdb-ripple-init data-mdb-modal-init
+                    class="btn btn-primary action_button"
+                    data-mdb-ripple-init data-mdb-modal-init
                     data-mdb-target="#locationModal"
                     data-message="Add Location"
                     data-action="add_location"
@@ -51,11 +63,11 @@
         </div>
     </div>
     <div class="container-fluid pt-4 _hidden" id="settingsContainer">
-        <div class="row">
+        <div class="header">
             <h1 class="col-sm-8">Settings</h1>
             <button type="button" id="settingsReset"
-                    class="btn btn-primary col-sm-2 m-lg-auto"
-                    style="width: 150px; height: 40px" data-mdb-ripple-init>
+                    class="btn btn-primary action_button"
+                    data-mdb-ripple-init>
                 Reset Default
             </button>
         </div>
@@ -63,8 +75,25 @@
             {% include 'components/settings.html' %}
         </div>
     </div>
-    <div class="container-fluid pt-4 _hidden" id="usersContainer"></div>
+    <div class="container-fluid pt-4 _hidden" id="usersContainer">
+        <div class="header">
+            <h1 class="col-sm-8">Users</h1>
+            {% if superuser %}
+                <button type="button" id="settingsReset"
+                        class="btn btn-primary action_button"
+                        data-mdb-ripple-init>
+                    Add User
+                </button>
+            {% endif %}
+        </div>
+        <div class="border p-4 m-1">
+            {% if superuser %}
+                {% include 'components/users.html' %}
+            {% else %}
+                {% include 'components/forbidden.html' %}
+            {% endif %}
+        </div>
+    </div>
     <div class="container-fluid pt-4 _hidden" id="profileContainer"></div>
     <div class="container-fluid pt-4 _hidden" id="aboutContainer"></div>
-
 </main>
