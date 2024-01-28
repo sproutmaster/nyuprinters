@@ -35,7 +35,12 @@ def send_info_by_loc(loc):
 def underground_home():
     login = current_user.is_authenticated
     locations = Location.query.all() if login else []
-    return render_template('underground.html', locs=locations, login=login, footer=False)
+    return render_template('underground.html',
+                           locs=locations,
+                           login=login,
+                           superuser=current_user.type == 'superuser' if login else False,
+                           footer=False
+                           )
 
 
 @underground.route('/auth', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
