@@ -1,0 +1,43 @@
+<div>
+    <div class="modal fade" id="userModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalTitle"></h5>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div class="mb-3">
+                            <label for="userModalName" class="col-form-label text-light">Name *</label>
+                            <input type="text" class="form-control" id="userModalName"
+                                   placeholder="Enter name (max 30 chars)"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userModalNetID" class="col-form-label text-light">NetID *</label>
+                            <input type="text" class="form-control" id="userModalNetID"
+                                   placeholder="Enter netid (max 15 chars)"/>
+                        </div>
+                        <div class="mb-3 _hidden">
+                            <label for="userModalPassword" class="col-form-label text-light">
+                                New Password
+                            </label>
+                            <input type="text" class="form-control" id="userModalPassword"
+                                   placeholder="Set a password (At least 6 chars)"/>
+                        </div>
+                        <div class="form-check form-check-inline mb-4 m-lg-1">
+                            <input class="form-check-input" type="checkbox" id="userModalType"/>
+                            <label class="form-check-label" for="userModalType">Superuser</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init id="userModalSubmit">
+                        Add
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
