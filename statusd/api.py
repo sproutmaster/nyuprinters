@@ -288,27 +288,62 @@ def users_api():
         if not current_user.type == 'superuser':
             return error_resp('Unauthorized')
 
+    userid = request.args.get('user_id', request.form.get('user_id'))
+    netid = str(escape(request.form.get('netid', ''))).strip()
+    name = str(escape(request.form.get('name', ''))).strip()
+    password = request.form.get('password', '')  # will implement password reset later
+    user_type = str(escape(request.form.get('type', 'user'))).strip()
+    user = User.query.filter_by(id=userid).first()
+
+    if request.method in ['PUT', 'PATCH']:
+        if not all([netid, name, user_type]):
+            return error_resp('Missing required fields')
+    if request.method in ['DELETE']:
+        if not userid:
+            return error_resp('Missing required fields')
+
     # For getting user info
     if request.method == 'GET':
+        if userid:
+            if user:
+                return jsonify(user.info())
+            else:
+                return error_resp('User not found')
         users = User.query.all()
         return jsonify(list(map(lambda x: x.info(), users)))
 
     # For adding user
     elif request.method == 'PUT':
-        netid = str(escape(request.form.get('netid', '')))
-        name = str(escape(request.form.get('name', '')))
-        password = request.form.get('password')
-        user_type = str(escape(request.form.get('type', 'user')))
-        user = User.query.all(netid=netid).first()
+        user = User.query.filter_by(netid=netid).first()
         if user:
             return jsonify(error_resp('User already exists'))
         user = User(
             netid=netid,
             name=name,
             password=generate_password_hash(password, method='pbkdf2:sha256'),
-            user_type=user_type,
+            type=user_type,
         )
-        db.sessin.add(user)
+        db.session.add(user)
         db.session.commit()
-        return jsonify({'status': 'success', 'message': f'{name} added'})
+        return jsonify({'status': 'success', 'message': f'{name.split()[0]} added'})
 
+    # For updating user
+    elif request.method == 'PATCH':
+        if not user:
+            return jsonify(error_resp('User not found'))
+        user.netid = netid
+        user.name = name
+        if password:
+            user.password = generate_password_hash(password, method='pbkdf2:sha256')
+        user.type = user_type
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': f'{name.split()[0]} updated'})
+
+    # For deleting user
+    elif request.method == 'DELETE':
+        if not user:
+            return jsonify(error_resp('User not found'))
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({'status': 'success', 'message': f'{user.name.split()[0]} deleted'})
