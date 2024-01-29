@@ -15,8 +15,8 @@
   },
   {
     "key": "updated_try_timout",
-    "value": "9000",
-    "default_value": "9000",
+    "value": "9",
+    "default_value": "9",
     "type": "int",
     "description": "The timeout in seconds given to sourced to fetch data"
   },
