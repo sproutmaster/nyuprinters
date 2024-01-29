@@ -1,5 +1,6 @@
 {% set locs=locs %}
 {% set superuser=superuser %}
+{% set name=name %}
 <header>
     <!-- Sidebar -->
     {% include 'components/sidebar.html' %}
@@ -12,8 +13,10 @@
 <main style="margin-top: 58px; margin-left: 10px;">
     <!--PRINTER MODAL-->
     {% include 'components/printer-modal.html' %}
-    <!--PRINTER DELETE MODAL-->
+    <!--DELETE MODAL-->
     {% include 'components/delete-confirmation-modal.html' %}
+    <!--USER MODAL-->
+    {% include 'components/user-modal.html' %}
     <style>
         .header {
             display: flex;
@@ -81,7 +84,10 @@
             {% if superuser %}
                 <button type="button" id="settingsReset"
                         class="btn btn-primary action_button"
-                        data-mdb-ripple-init>
+                        data-mdb-modal-init data-mdb-ripple-init
+                        data-mdb-target="#userModal"
+                        data-action="add_user"
+                >
                     Add User
                 </button>
             {% endif %}
