@@ -38,6 +38,7 @@ def underground_home():
     return render_template('underground.html',
                            locs=locations,
                            login=login,
+                           name=current_user.name.split()[0] if login else None,
                            superuser=current_user.type == 'superuser' if login else False,
                            footer=False
                            )
