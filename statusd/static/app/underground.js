@@ -13,8 +13,8 @@ $(document).ready(function () {
 
     const modalDelete = $('#deleteModal');
     const modalDeleteTitle = $('#deleteModalTitle');
-    const modalDeleteSubmit = $('#deleteModalSubmit');
     const modalDeleteMessage = $('#deleteModalMessage');
+    const modalDeleteSubmit = $('#deleteModalSubmit');
 
     const modalLocation = $('#locationModal');
     const modalLocationTitle = $('#locationModalTitle');
@@ -24,13 +24,85 @@ $(document).ready(function () {
     const modalLocationVisible = $('#locationModalVisible');
     const modalLocationSubmit = $('#locationModalSubmit');
 
+    const modalUser = $('#userModal');
+    const modalUserTitle = $('#userModalTitle');
+    const modalUserName = $('#userModalName');
+    const modalUserNetID = $('#userModalNetID');
+    const modalUserPassword = $('#userModalPassword');
+    const modalUserType = $('#userModalType');
+    const modalUserSubmit = $('#userModalSubmit');
+
     let addPrinterMode = false;
     let smartfetchFinished = false;
     let addPrinterModeIP;
     let current_printer_id;
     let current_location_id;
+    let current_user_id;
     let locationAction;
     let deleteAction;
+    let userAction;
+
+    $(document).on('show.bs.modal', '#userModal', function (e) {
+        const button = $(e.relatedTarget); // Button that triggered the modal
+        current_user_id = button.data('user-id');
+        // Add title to modal
+        if (button.data('action') === 'add_user') {
+            userAction = 'add_user';
+            modalUserTitle.text('Create User');
+            modalUserName.val('');
+            modalUserNetID.val('');
+            modalUserPassword.val('');
+            modalUserType.prop('checked', false);
+            modalUserPassword.parent().removeClass('_hidden');
+        } else {
+            userAction = 'edit_user';
+            modalUserTitle.text('Edit User');
+            modalUserPassword.parent().addClass('_hidden');
+            modalUserSubmit.text('Save');
+            let user_id = current_user_id = button.data('user-id');
+            userActions('GET', {user_id});
+        }
+    });
+
+    modalUserSubmit.on('click', function () {
+        let name = modalUserName.val();
+        let netid = modalUserNetID.val();
+        let password = modalUserPassword.val();
+        let type = modalUserType.is(":checked") ? 'superuser' : 'user';
+
+        if (name === '' || netid === '') {
+            alert('Please fill all required fields');
+            return;
+        }
+        if (userAction === 'edit_user') {
+            userActions('PATCH', {user_id: current_user_id, name: modalUserName.val(), netid: modalUserNetID.val(), type: modalUserType.is(":checked") ? 'superuser' : 'user'});
+        }
+        else {
+            if(password.length < 6) {
+                alert('Password must be at least 6 characters long');
+                return;
+            }
+            userActions('PUT', {name, netid, type, password});
+        }
+        modalUser.modal('hide');
+        setTimeout(fill_users_table, 500);
+    });
+
+    function userActions(method, stuff_to_send) {
+        $.ajax({
+            url: $(location).attr('origin') + '/api/users',
+            method: method,
+            data: stuff_to_send,
+            success: (data) => {
+                modalUserName.val(data.name);
+                modalUserNetID.val(data.netid);
+                modalUserType.prop('checked', data.type === 'superuser');
+            },
+            error: function () {
+                console.error('Cannot connect to server');
+            }
+        });
+    }
 
 
     modalLocation.on('show.bs.modal', function (e) {
@@ -89,12 +161,18 @@ $(document).ready(function () {
             current_location_id = button.data('location-id');
             modalDeleteTitle.text('Delete Location');
             modalDeleteMessage.text(`Are you sure you want to delete ${button.data('location-name')}?`);
+        } else if (deleteAction === 'delete_user') {
+            current_user_id = button.data('user-id');
+            modalDeleteTitle.text('Delete User');
+            modalDeleteMessage.text(`Are you sure you want to delete ${button.data('user-name')}?`);
         }
     });
 
     $(document).on('hide.bs.modal', '#deleteModal', function (e) {
         current_printer_id = null;
         deleteAction = null;
+        current_location_id = null;
+        current_user_id = null;
     });
 
     modalDeleteSubmit.on('click', function () {
@@ -117,6 +195,9 @@ $(document).ready(function () {
         } else if (deleteAction === 'delete_location') {
             location_actions('DELETE', current_location_id);
             setTimeout(fill_locations_table, 500);
+        } else if (deleteAction === 'delete_user') {
+            userActions('DELETE', {user_id: current_user_id});
+            setTimeout(fill_users_table, 500);
         }
         modalDelete.modal('hide');
     });
@@ -381,6 +462,41 @@ function fill_locations_table() {
                     '</td>' +
                     '</tr>';
                 $('#locationsTable tbody').append(row);
+            });
+        },
+        error: function () {
+            console.error('Cannot connect to server');
+        }
+    });
+}
+
+function fill_users_table() {
+    const uTable = $('#usersTable tbody');
+    uTable.empty();
+    $.ajax({
+        url: $(location).attr('origin') + '/api/users',
+        method: 'GET',
+        success: (data) => {
+            data.forEach((item) => {
+                const row = '<tr>' +
+                    '<td>' + item.name + '</td>' +
+                    '<td>' + item.netid + '</td>' +
+                    '<td>' + item.type + '</td>' +
+                    '<td>' +
+                    '<div>' +
+                    '<button type="button" class="btn btn-link btn-sm" style="margin-right: -3px" data-mdb-modal-init ' +
+                    'data-mdb-target="#userModal" data-action="edit_user" data-user-id="' + item.id + '">' +
+
+                    '<i class="fas fa-pencil"></i>' +
+                    '</button>' +
+                    '<button type="button" class="btn btn-link btn-sm" style="margin-left: -3px" data-mdb-modal-init ' +
+                    'data-mdb-target="#deleteModal" data-action="delete_user" data-user-id="' + item.id + '" data-user-name="' + item.name + '">' +
+                    '<i class="fas fa-times"></i>' +
+                    '</button>' +
+                    '</div>' +
+                    '</td>' +
+                    '</tr>';
+                uTable.append(row);
             });
         },
         error: function () {
