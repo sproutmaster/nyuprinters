@@ -56,7 +56,6 @@
 </div>
 
 <script>
-
     let originalValues = {};
     let currentValues = {};
     function fill_settings() {
@@ -101,19 +100,4 @@
             }
         });
     });
-
-    $('#settingsReset').on('click', function () {
-        $.ajax({
-            url: '/api/settings',
-            type: 'POST',
-            data: {
-                reset : true,
-            },
-            success: function (data) {
-                setTimeout(fill_settings, 500);
-                $('#save_settings').prop('disabled', true);
-            }
-        });
-    });
-
 </script>
