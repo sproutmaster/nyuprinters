@@ -118,3 +118,11 @@ class User(UserMixin, db.Model):
     type = db.Column(db.String(10), nullable=False, default='user')
     location_id = db.Column(db.Integer, db.ForeignKey('locations.id', ondelete='SET NULL', onupdate='CASCADE'))
     location = db.relationship('Location', backref=db.backref('users', lazy=True))
+
+    def info(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'netid': self.netid,
+            'type': self.type,
+        }
