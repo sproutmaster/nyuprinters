@@ -540,7 +540,7 @@ function fill_contrib() {
         success: function (data) {
             data.forEach(function (contributor) {
                 const img = $("<img>").attr("src", contributor.avatar_url);
-                const link = $("<a>").attr("href", contributor.html_url).append(img);
+                const link = $("<a>").attr("href", contributor.html_url).attr("target", "_blank").append(img);
                 $("#contrib").append(link);
             });
         }
