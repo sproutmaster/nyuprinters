@@ -84,7 +84,7 @@ def printers_api():
 
     # Relay message to and from sourced
     elif request.method == 'POST':
-        if ip is None or ip == '' or ip == '127.0.0.1':
+        if not ip or ip == '127.0.0.1' or ip == '0.0.0.0':  # Prevent access to loopback IPs (there is a flaw here but will fix later)
             return error_resp('Invalid IP Address')
         try:
             sourced_resp = get(f'{env.sourced_url}?ip={ip}')
@@ -233,9 +233,7 @@ def settings_api():
 
     key = str(escape(request.form.get('key', request.args.get('key', ''))))
     value = str(escape(request.form.get('value', '')))
-    key_value = request.form.get('settings', '')
-
-    print(key_value)
+    key_values = request.form.get('settings', '')
 
     # Get all settings, or a specific setting
     if request.method == 'GET':
@@ -248,9 +246,9 @@ def settings_api():
 
     # Update a setting
     elif request.method == 'PATCH':
-        if key_value:
-            key_value = json_parse(key_value)
-            for k, v in key_value.items():
+        if key_values: # Update multiple settings
+            key_values = json_parse(key_values)
+            for k, v in key_values.items():
                 if not (setting := Setting.query.filter_by(key=k).first()):
                     return error_resp('Invalid key')
                 setting.value = str(escape(v)) if v else setting.default_value
@@ -258,7 +256,7 @@ def settings_api():
             db.session.commit()
             return success_resp('Settings updated')
 
-        elif not (setting := Setting.query.filter_by(key=key).first()):
+        elif not (setting := Setting.query.filter_by(key=key).first()): # Update single setting
             return error_resp('Invalid key')
 
         setting.value = value if value else setting.default_value
