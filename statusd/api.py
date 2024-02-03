@@ -246,7 +246,7 @@ def settings_api():
 
     # Update a setting
     elif request.method == 'PATCH':
-        if key_values: # Update multiple settings
+        if key_values:  # Update multiple settings
             key_values = json_parse(key_values)
             for k, v in key_values.items():
                 if not (setting := Setting.query.filter_by(key=k).first()):
@@ -256,7 +256,7 @@ def settings_api():
             db.session.commit()
             return success_resp('Settings updated')
 
-        elif not (setting := Setting.query.filter_by(key=key).first()): # Update single setting
+        elif not (setting := Setting.query.filter_by(key=key).first()):  # Update single setting
             return error_resp('Invalid key')
 
         setting.value = value if value else setting.default_value
@@ -345,3 +345,13 @@ def users_api():
         db.session.delete(user)
         db.session.commit()
         return jsonify({'status': 'success', 'message': f'{user.name.split()[0]} deleted'})
+
+
+@api.route('/contrib')  # Get contributors list from github
+def contrib():
+    try:
+        resp = get(f'https://api.github.com/repos/{env.repo}/contributors',
+                   headers={'Authorization': f'Bearer {env.github_token}'})
+        return jsonify(resp.json())
+    except Exception:
+        return error_resp('Failed to get contributors')
