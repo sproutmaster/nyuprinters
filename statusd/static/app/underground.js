@@ -532,3 +532,17 @@ function fill_user_profile() {
         }
     });
 }
+
+function fill_contrib() {
+    $("#contrib").empty();
+    $.ajax({
+        url: "/api/contrib",
+        success: function (data) {
+            data.forEach(function (contributor) {
+                const img = $("<img>").attr("src", contributor.avatar_url);
+                const link = $("<a>").attr("href", contributor.html_url).append(img);
+                $("#contrib").append(link);
+            });
+        }
+    });
+}

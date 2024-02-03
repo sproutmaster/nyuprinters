@@ -1,6 +1,7 @@
 {% set locs=locs %}
 {% set superuser=superuser %}
 {% set name=name %}
+{% set github=github %}
 <header>
     <!-- Sidebar -->
     {% include 'components/sidebar.html' %}
@@ -109,5 +110,11 @@
             {% include 'components/profile.html' %}
         </div>
     </div>
-    <div class="container-fluid pt-4 _hidden" id="aboutContainer"></div>
+    <div class="container-fluid pt-4 _hidden" id="aboutContainer">
+        <div class="header">
+            <h1 class="col-sm-8">About</h1>
+        </div>
+        <div class="border p-4 m-1">
+            {% include 'components/about.html' %}
+    </div>
 </main>
