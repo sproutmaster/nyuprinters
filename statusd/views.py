@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import env
 from models import db, Location, User
-from api import error_resp
+from api import error_resp, success_resp
 
 index = Blueprint('index', __name__, static_folder='static', template_folder='templates')
 underground = Blueprint('underground', __name__, static_folder='static', template_folder='templates')
@@ -44,7 +44,7 @@ def underground_home():
                            )
 
 
-@underground.route('/auth', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
+@underground.route('/auth', methods=['GET', 'POST', 'PATCH', 'DELETE'])
 def underground_auth():
     # For getting user info
     if request.method == 'GET':
@@ -62,16 +62,27 @@ def underground_auth():
             login_user(user, remember=remember)
         return redirect(url_for('underground.underground_home'))
 
+    # For changing password
     elif request.method == 'PATCH':
         if current_user.is_authenticated:
-            name = str(escape(request.form.get('name', 'Anonymouse')))
             old_password = request.form.get('old_password')
             password = request.form.get('new_password')
             if check_password_hash(current_user.password, old_password):
                 user = User.query.filter_by(netid=current_user.netid).first()
-                user.name = name
                 user.password = generate_password_hash(password, method='pbkdf2:sha256')
                 db.session.add(user)
                 db.session.commit()
-                return jsonify({'status': 'success', 'message': 'Info updated'})
-        return jsonify(error_resp('Unauthorized'))
+                return success_resp('Password updated')
+            return error_resp('Current password is incorrect')
+        return error_resp('Unauthenticated')
+
+    # For logging out
+    elif request.method == 'DELETE':
+        logout_user()
+        return success_resp('Logged out')
+
+
+@underground.route('/auth/logout')
+def underground_logout():
+    logout_user()
+    return redirect(url_for('underground.underground_home'))
