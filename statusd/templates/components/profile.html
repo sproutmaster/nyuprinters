@@ -1,0 +1,109 @@
+<div class="col-lg-6">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Name</p>
+                </div>
+                <div class="col-sm-9">
+                    <p class="text-muted mb-0" id="userName"></p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">NetID</p>
+                </div>
+                <div class="col-sm-9">
+                    <p class="text-muted mb-0" id="userNetID"></p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <p class="mb-0">Type</p>
+                </div>
+                <div class="col-sm-9">
+                    <p class="text-muted mb-0" id="userType"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="changePasswordContainer" class="col-lg-6 _hidden">
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="oldPassword">Current Password</label>
+                    <input type="password" class="form-control" id="oldPassword"
+                           placeholder="Enter your current password">
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-sm-6">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" class="form-control" id="newPassword" placeholder="Minimum 6 chars">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="btn btn-primary" id="changePassword">Change Password</button>
+<button class="btn btn-outline-primary mx-2 _hidden" id="changePasswordCancel">Cancel</button>
+
+<script>
+    const changePasswordCon = $("#changePasswordContainer");
+    const changePasswordButton = $("#changePassword");
+    const changePasswordCancel = $("#changePasswordCancel");
+    let changePswMode = false;
+
+    changePasswordButton.click(() => {
+        if (!changePswMode) {
+            changePswMode = true;
+            changePasswordCon.show();
+            changePasswordCancel.show();
+        } else {
+            let oldPassword = $("#oldPassword");
+            let newPassword = $("#newPassword");
+            if (!oldPassword.val() || !newPassword.val()) {
+                alert("Please fill all fields");
+                return;
+            }
+            if (newPassword.val().length < 6) {
+                alert("New password must be at least 6 characters long");
+                return;
+            }
+
+            $.ajax({
+                url: "/underground/auth",
+                method: "PATCH",
+                data: {
+                    old_password: oldPassword.val(),
+                    new_password: newPassword.val()
+                },
+                success: (res) => {
+                    if (res.status === "success") {
+                        alert("Password changed successfully");
+                        newPassword.val("");
+                        changePswMode = false;
+                        changePasswordCon.hide();
+                        changePasswordCancel.hide();
+                    } else {
+                        alert(res.message);
+                    }
+                    oldPassword.val("");
+                }
+            });
+
+        }
+    });
+
+    changePasswordCancel.click(() => {
+        changePswMode = false;
+        changePasswordCon.hide();
+        changePasswordCancel.hide();
+    });
+
+</script>

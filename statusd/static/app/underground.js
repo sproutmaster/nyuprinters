@@ -1,3 +1,15 @@
+// function onVisible(element, callback) {
+//     new IntersectionObserver((entries, observer) => {
+//         entries.forEach(entry => {
+//             if (entry.intersectionRatio > 0) {
+//                 callback(element);
+//                 observer.disconnect();
+//             }
+//         });
+//     }).observe(element);
+//     if (!callback) return new Promise(r => callback = r);
+// }
+
 $(document).ready(function () {
     const modalPrinterTitle = $('#printerModalTitle');
     const modalPrinterName = $('#printerModalName');
@@ -75,10 +87,14 @@ $(document).ready(function () {
             return;
         }
         if (userAction === 'edit_user') {
-            userActions('PATCH', {user_id: current_user_id, name: modalUserName.val(), netid: modalUserNetID.val(), type: modalUserType.is(":checked") ? 'superuser' : 'user'});
-        }
-        else {
-            if(password.length < 6) {
+            userActions('PATCH', {
+                user_id: current_user_id,
+                name: modalUserName.val(),
+                netid: modalUserNetID.val(),
+                type: modalUserType.is(":checked") ? 'superuser' : 'user'
+            });
+        } else {
+            if (password.length < 6) {
                 alert('Password must be at least 6 characters long');
                 return;
             }
@@ -501,6 +517,18 @@ function fill_users_table() {
         },
         error: function () {
             console.error('Cannot connect to server');
+        }
+    });
+}
+
+function fill_user_profile() {
+    $.ajax({
+        url: "/underground/auth",
+        type: "GET",
+        success: function (data) {
+            $("#userName").text(data.name);
+            $("#userNetID").text(data.netid);
+            $("#userType").text(data.type);
         }
     });
 }

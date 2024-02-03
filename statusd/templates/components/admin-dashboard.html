@@ -22,7 +22,8 @@
             display: flex;
             justify-content: space-between;
         }
-        .action_button{
+
+        .action_button {
             max-width: 150px;
             max-height: 40px;
             margin-right: 5px;
@@ -100,6 +101,13 @@
             {% endif %}
         </div>
     </div>
-    <div class="container-fluid pt-4 _hidden" id="profileContainer"></div>
+    <div class="container-fluid pt-4 _hidden" id="profileContainer">
+        <div class="header">
+            <h1 class="col-sm-8">Profile</h1>
+        </div>
+        <div class="border p-4 m-1">
+            {% include 'components/profile.html' %}
+        </div>
+    </div>
     <div class="container-fluid pt-4 _hidden" id="aboutContainer"></div>
 </main>
