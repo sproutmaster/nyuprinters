@@ -22,6 +22,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from os import environ
 from datetime import timedelta
+from dotenv import load_dotenv
 
 from models import db, User
 

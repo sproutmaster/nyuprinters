@@ -11,3 +11,4 @@ aiohttp~=3.8.4
 gunicorn
 pytz
 requests
+python-dotenv
