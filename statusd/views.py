@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, escape, redirect, url_for, request, jsonify
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import env
 from models import db, Location, User
-from api import error_resp, success_resp
+from utils import simple_sanitize, error_resp, success_resp
 
 index = Blueprint('index', __name__, static_folder='static', template_folder='templates')
 underground = Blueprint('underground', __name__, static_folder='static', template_folder='templates')
@@ -20,15 +20,18 @@ def home():
 
 @index.route('/<string:loc>')
 def send_info_by_loc(loc):
-    loc = escape(loc.lower())
+    filters = {'visible': True} if not current_user.is_authenticated else {}
+    loc = simple_sanitize(loc.lower())
+
     if loc := Location.query.filter_by(short_name=loc).first():
         return render_template('app.html',
+                               login=current_user.is_authenticated,
+                               locs=Location.query.filter_by(**filters).all(),
                                loc=loc.short_name,
                                github=env.github,
-                               discord=env.discord,
                                )
-    else:
-        return redirect(url_for('index.home'))
+
+    return redirect(url_for('index.home'))
 
 
 @underground.route('/')
