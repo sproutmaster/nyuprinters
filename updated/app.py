@@ -2,6 +2,7 @@ import threading
 from time import sleep
 from dataclasses import dataclass
 from os import environ
+from sys import stderr
 import psycopg2
 
 
@@ -15,7 +16,7 @@ class Env:
         try:
             self.db = psycopg2.connect(self.postgres_url)
         except Exception as e:
-            print(f"Error connecting to database: {e}")
+            print(f"Error connecting to database: {e}", file=stderr)
             exit(1)
 
 
