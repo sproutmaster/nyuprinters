@@ -21,17 +21,24 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from os import environ
+from datetime import timedelta
 
 from models import db, User
 
 
 class Env:
     def __init__(self):
+        self.version = environ.get("VERSION", default="0.1")
+        self.support_contact = environ.get("SUPPORT_CONTACT", default="joe@osiris.cyber.nyu.edu")
         self.discord = environ.get("DISCORD", default='#')
-        self.github = environ.get("GITHUB", default='#')
-        self.postgres_uri = environ.get("POSTGRES_URI", default="postgresql://admin:admin@localhost:5432/nyup")
+        self.repo = environ.get("REPO", default='sproutmaster/nyuprinters')
+        self.github_token = environ.get("GITHUB_TOKEN", default='')
+        self.github = f'https://github.com/{self.repo}'
+        self.postgres_url = environ.get("POSTGRES_URL", default="postgresql://admin:admin@localhost:5432/nyup")
         self.default_loc = environ.get("DEFAULT_LOC", default="bobst")
-        self.secret_key = environ.get("SECRET_KEY", default="not-a-secret")
+        self.secret_key = environ.get("SECRET_KEY", default="dingdongbingbongbangdangpfchans")
+        self.sourced_url = environ.get("SOURCED_URI", default="http://localhost:8000")
+        self.api_key = environ.get("API_KEY", default='iloveapis')
 
 
 env = Env()
@@ -39,10 +46,12 @@ env = Env()
 
 def create_app():
     app = Flask(__name__)
-    app.config["SQLALCHEMY_DATABASE_URI"] = env.postgres_uri
+    app.config["SQLALCHEMY_DATABASE_URI"] = env.postgres_url
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ECHO"] = False
     app.config['SECRET_KEY'] = env.secret_key
+    app.config['REMEMBER_COOKIE_DURATION'] = timedelta(days=7)
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
     db.init_app(app)
 
