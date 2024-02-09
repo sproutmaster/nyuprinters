@@ -1,0 +1,274 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  font-family: Roboto;
+}
+
+.print-status{
+  margin-top: 20px;
+}
+
+.print-status .progress{
+  border-radius: 10px;
+}
+
+.print-status .paper-tray .progress{
+  border-radius: 0 10px 10px 0;
+  border-left: none;
+}
+
+.print-status .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.print-status .card{
+  width: 300px;
+  min-height: 425px;
+  padding: 0;
+  margin: 9px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.print-status .card-header{
+  position: relative;
+}
+
+.print-status .card-header .settings{
+  position: absolute;
+  right: 20px;
+  top: 8px;
+  text-decoration: none;
+}
+
+.print-status .card-header .settings:hover img{
+  transform: rotate(-90deg);
+}
+
+.print-status .card-header .settings img{
+  transition: 0.5s;
+  height: 20px;
+  width: 20px;
+}
+
+.paper-tray.attention .tray-num,
+paper-tray.attention .progress-bar{
+  background: #ff3554;
+}
+
+.paper-tray.attention,
+.paper-tray.warning,
+.paper-tray.ready{
+  border: none !important;
+}
+
+.paper-tray.attention:nth-child(2) .progress-bar,
+.paper-tray.attention:nth-child(2) .tray-num{
+  background: #02b74a;
+}
+
+.paper-tray.warning .tray-num{
+  background: #ffa900;
+}
+
+.paper-tray.warning .progress-bar{
+  background: #ffa900;
+}
+
+.paper-tray.ready .tray-num{
+  background: #02b74a;
+}
+
+.paper-tray.ready .progress-bar{
+  background: #02b74a;
+}
+
+
+.print-status .ready{
+  /*box-shadow: 0 0 20px 0 #02b74a;*/
+  border: 2px solid #02b74a;
+}
+
+.print-status .warning{
+  /*box-shadow: 0 0 20px 0 #ffa900;*/
+  border: 2px solid #ffa900;
+}
+
+.print-status .card.attention{
+  /*box-shadow: 0 0 20px 0 red;*/
+  border: 2px solid red;
+}
+
+.print-status .card.ready .card-header{
+  background: #02b74a !important;
+}
+
+.print-status .card.warning .card-header{
+  background: #ffa900 !important;
+}
+
+.print-status .card.attention .card-header{
+  background: red !important;
+}
+
+
+.print-status .progress{
+  height: 12px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  border: 1px solid #eee;
+}
+
+.print-status .paper-tray .tray-num{
+  width: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  border-radius: 10px 0 0 10px;
+  border: 1px solid #eee;
+  border-right: none;
+}
+
+.print-status .paper-tray{
+  display: flex;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.print-status .paper-tray.is-error .error-msg{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.print-status .paper-tray .progress{
+  font-size: 15px;
+  width: 90%;
+  height: auto;
+  margin-bottom: 0;
+}
+
+.error-msg{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  font-size: 12px;
+  color: #ff3554;
+  text-transform: Uppercase;
+}
+
+.print-status .paper-tray:nth-child(2) .error-msg{
+  color: #02b74a;
+}
+
+
+
+.bg-cyan{
+  background: #00aeef;
+}
+
+.bg-magenta{
+  background: #ec008c;
+}
+
+.bg-yellow{
+  background: #FFD100;
+}
+
+.bg-black{
+  background: #000000;
+}
+
+.print-status .card-footer p{
+  margin-bottom: 5px;
+}
+
+#filter-menu{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 20px;
+}
+
+#filter-menu .view-settings{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#filter-menu img{
+  margin-top: 5px;
+}
+
+#filter-menu img:first-child{
+  height: 22px;
+  margin-right: 11px;
+}
+#filter-menu img:last-child{
+  height: 30px;
+}
+
+
+.accordion-button.collapsed {
+  color: #fff;
+}
+
+.accordion-button img {
+  width: 20px;
+  height: 20px;
+}
+
+
+
+
+/* --------------- List view --------------- */
+
+.print-status.list-view .container{
+  flex-direction: column;
+}
+
+.print-status.list-view .card{
+  width: 100%;
+  min-height: auto;
+}
+
+.print-status.list-view .card-main-block{
+  display: flex;
+
+}
+
+.print-status.list-view .card-header{
+  border-radius: 0;
+  width: 20%;
+  height: auto;
+}
+
+.print-status.list-view .card-body{
+  width: 80%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.print-status.list-view .progress-container{
+  display: flex;
+  flex-direction: row;
+}
+
+.print-status.list-view .progress{
+  width: 80px;
+  border-radius: 0;
+}
+
+.print-status.list-view .progress .progress-bar{
+  border-radius: 0;
+}
