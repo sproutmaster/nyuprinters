@@ -5,22 +5,9 @@ from flask_login import current_user
 from requests import get
 from app import env
 from json import loads as json_parse
+from utils import error_resp, success_resp
 
 api = Blueprint('api', __name__, static_folder='static', template_folder='templates')
-
-
-def error_resp(message):
-    return {
-        'status': 'error',
-        'message': message
-    }
-
-
-def success_resp(message):
-    return {
-        'status': 'success',
-        'message': message
-    }
 
 
 @api.route('/')
@@ -29,10 +16,6 @@ def api_index():
         'status': 'success',
         'message': 'API is running',
         'version': env.version,
-        'github': env.github,
-        'discord': env.discord,
-        'default_loc': env.default_loc,
-        'support_contact': env.support_contact,
     }
 
 
@@ -40,7 +23,7 @@ def api_index():
 def printers_api():
     login = current_user.is_authenticated or request.headers.get('X-Apikey') == env.api_key
     if request.method in ['PUT', 'PATCH', 'DELETE'] and not login:
-        return error_resp('Unauthorized')
+        return error_resp('Unauthenticated')
 
     filters = {'visible': True} if not login else {}
 
@@ -51,7 +34,7 @@ def printers_api():
     type = 'color' if request.form.get('type') == 'true' else 'grayscale'
     serial = str(escape(request.form.get('serial', '')))
     ip = str(escape(request.form.get('ip', '')))
-    location = request.form.get('location', '')
+    location = request.args.get('location', request.form.get('location'))
     comment = str(escape(request.form.get('comment', '')))
     visible = request.form.get('visible') == 'true'
 
@@ -73,7 +56,7 @@ def printers_api():
             if loc := Location.query.filter_by(short_name=location, **filters).first():
                 return jsonify(list(map(lambda x: x.info(login), loc.printers)))
             else:
-                return error_resp('Invalid Location, no printers, or no permission to view')
+                return []
         elif printer_id:  # For getting a specific printer
             if printer := Printer.query.filter_by(id=int(printer_id), **filters).first():
                 return jsonify(printer.info(login))
