@@ -26,6 +26,8 @@ from dotenv import load_dotenv
 
 from models import db, User
 
+load_dotenv()
+
 
 class Env:
     def __init__(self):
