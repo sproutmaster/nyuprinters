@@ -12,11 +12,7 @@ api = Blueprint('api', __name__, static_folder='static', template_folder='templa
 
 @api.route('/')
 def api_index():
-    return {
-        'status': 'success',
-        'message': 'API is running',
-        'version': env.version,
-    }
+    return success_resp("API is running")
 
 
 @api.route('/printers', methods=['GET', 'POST', 'PUT', 'PATCH', 'DELETE'])
