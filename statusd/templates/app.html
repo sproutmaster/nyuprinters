@@ -9,16 +9,16 @@
 {% endblock %}
 
 {% block body %}
-    <div class="container my-5">
+    <div class="container my-5" id="main_container" data-loc="{{ loc }}">
         <section>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="navbar">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/">NYUPrinters</a>
                     <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
-                            data-mdb-target="#navbarColor02">
+                            data-mdb-target="#navbar">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarColor02">
+                    <div class="collapse navbar-collapse" id="navbar">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item me-3 me-lg-0 dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" role="button"

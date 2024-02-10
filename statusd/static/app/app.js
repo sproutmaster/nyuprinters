@@ -10,8 +10,9 @@
 
     // Functions that will be called when page is opened. If error occurs, it will display it.
 
-    let location = window.location.href.split("/")[3];
+
     function init() {
+        const location = $('#main_container').data('loc');
         $.ajax({
             url: "api/printers",
             type: "GET",
@@ -19,7 +20,7 @@
                 "location": location
             },
             success: (data) => {
-                data.forEach( (printer) => {
+                data.forEach((printer) => {
                     populateCard(printer);
                 });
             }
