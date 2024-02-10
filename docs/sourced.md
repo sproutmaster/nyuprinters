@@ -13,3 +13,7 @@ GET /
 ```bash
 make run
 ```
+
+## Dependencies
+
+- Node.js 18 or newer
