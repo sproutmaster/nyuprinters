@@ -5,7 +5,7 @@ from flask_login import current_user
 from requests import get
 from app import env
 from json import loads as json_parse
-from utils import error_resp, success_resp
+from utils import error_resp, success_resp, simple_sanitize
 
 api = Blueprint('api', __name__, static_folder='static', template_folder='templates')
 
@@ -132,7 +132,7 @@ def locations_api():
 
     location_id = request.args.get('location_id', request.form.get('location_id'))
     name = str(escape(request.form.get('name', '')))
-    short_name = str(escape(request.form.get('short', '')))
+    short_name = str(simple_sanitize(request.form.get('short', '')))
     description = str(escape(request.form.get('description', '')))
     visible = request.form.get('visible') == 'true'
 
