@@ -72,7 +72,6 @@ class Printer(db.Model):
             'location': self.location.short_name,
             'comment': self.comment,
             'visible': self.visible,
-            'admin': admin,
             'status': self.status,
         }
 

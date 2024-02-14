@@ -1,6 +1,18 @@
 (function () {
 
-    window.addEventListener("load", init);
+    let LOGGED_IN = false;
+    function loggedIn(){
+        $.ajax({
+            url: "underground/auth",
+            type: "GET",
+            success: (data) => {
+                LOGGED_IN = data.type !== null;
+            }
+        });
+    }
+    loggedIn();
+
+    window.addEventListener("load", main);
 
     const ACCARDION_ERROR_ICON = "static/icons/error.svg";
     const ACCARDION_CAUTION_ICON = "static/icons/caution.svg";
@@ -8,10 +20,8 @@
 
     const DEFAULT_PROGRESS_BAR_VALUE = 0;
 
-    // Functions that will be called when page is opened. If error occurs, it will display it.
+    function main() {
 
-
-    function init() {
         const location = $('#main_container').data('loc');
         $.ajax({
             url: "api/printers",
@@ -98,7 +108,12 @@
      * @param {JSON} data - data from which the name of the card is extracted.
      */
     function setName(card, data) {
-        $(card).find('.card-header-text').text(data.meta.name);
+        if (LOGGED_IN) {
+            let nameLink = $('<a>').attr('href', 'https://' + data.meta.ip).attr('target', '_new').text(data.meta.name);
+            $(card).find('.card-header-text').empty().append(nameLink);
+        } else {
+            $(card).find('.card-header-text').text(data.meta.name);
+        }
     }
 
     /**
@@ -339,10 +354,10 @@
      */
     function createMessageBlock(data) {
 
-        let serial = data.response.message.serial;
+        let id = data.meta.id;
 
-        const accordionId1 = "accordion-parrent-id-" + serial;
-        const accordionId2 = "accordion-child-id-" + serial;
+        const accordionId1 = "accordion-parrent-id-" + id;
+        const accordionId2 = "accordion-child-id-" + id;
 
 
         let accordion = document.createElement("div");
