@@ -20,7 +20,7 @@ venv:
 	fi
 
 .PHONY: req
-requirements: venv
+req: venv
 	@echo "### Updating updated requirements"
 	pip-compile --quiet --upgrade requirements.txt
 

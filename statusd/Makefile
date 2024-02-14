@@ -25,7 +25,7 @@ seed: venv
 	./venv/bin/python3 seeder.py
 
 .PHONY: req
-requirements: venv
+req: venv
 	@echo "### Updating ststusd requirements"
 	pip-compile --quiet --upgrade requirements.txt
 
