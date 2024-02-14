@@ -1,9 +1,10 @@
-import threading
 from time import sleep
 from dataclasses import dataclass
 from os import environ
 from sys import stderr
+
 import psycopg2
+import threading
 
 
 @dataclass
@@ -48,11 +49,11 @@ class ConfigUpdater:
                 settings = dict(cur.fetchall())
                 cur.close()
 
-                self.setting.running = bool(settings['updated_run'])
+                self.setting.running = settings['updated_run'] == 'true'
                 self.setting.refresh_interval = int(settings['updated_update_interval'])
                 self.setting.session_timeout = int(settings['updated_try_timout'])
                 self.setting.delay = int(settings['updated_try_delay_factor'])
-                self.setting.constant_field_updates = bool(settings['updated_constant_field_updates'])
+                self.setting.constant_field_updates = settings['updated_constant_field_updates'] == 'true'
 
                 print(f"Running: {self.setting.running}")
 

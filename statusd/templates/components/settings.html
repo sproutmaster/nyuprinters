@@ -66,14 +66,12 @@
             type: 'GET',
             success: function (data) {
                 data.forEach((item) => {
-                    if (item.type === 'int') {
-                        originalValues[item.key] = item.value;
+                    originalValues[item.key] = item.value;
+                    if (item.type === 'int')
                         $(`#${item.key}`).val(item.value);
-                    }
-                    else if (item.type === 'bool') {
-                        originalValues[item.key] = item.value === 'True';
-                        $(`#${item.key}`).prop('checked', item.value === 'True');
-                    }
+                    else if (item.type === 'bool')
+                        $(`#${item.key}`).prop('checked', item.value);
+
                 });
                 currentValues = {...originalValues};
             }

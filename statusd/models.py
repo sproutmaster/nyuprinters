@@ -99,10 +99,11 @@ class Setting(db.Model):
     description = db.Column(db.Text)
 
     def info(self):
+        val = lambda t, v: v == 'true' if t == 'bool' else eval(f"{t}({v})")
         return {
             'key': self.key,
-            'value': self.value,
-            'default_value': self.default_value,
+            'value': val(self.type, self.value),
+            'default_value': val(self.type, self.default_value),
             'type': self.type,
             'description': self.description,
         }
