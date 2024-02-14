@@ -1,4 +1,6 @@
 from datetime import datetime
+from time import sleep
+
 from pytz import timezone
 import aiohttp
 import asyncio
@@ -27,9 +29,11 @@ async def get_status(session: aiohttp.ClientSession, db, ip: str, delay: int = 0
             cur = db.cursor()
             cur.execute("SELECT current_state, last_state, last_online FROM printers WHERE ip_address = %s", (ip,))
 
-            current_state = cur.fetchone()[0]
-            last_state = cur.fetchone()[1]
-            last_online = cur.fetchone()[2]
+            db_result = cur.fetchone()
+
+            current_state = db_result[0]
+            last_state = db_result[1]
+            last_online = db_result[2]
 
             if resp['status'] == 'success':
                 if setting.constant_field_updates:
@@ -58,6 +62,8 @@ async def get_status(session: aiohttp.ClientSession, db, ip: str, delay: int = 0
                         (current_state, last_state, last_online,
                          ip,))
 
+            print(f"update {ip}")
+
             cur.close()
             db.commit()
 
@@ -78,7 +84,7 @@ async def main():
         Get all IP addresses from database and add data fetch task to queue. After getting the data, push it into db
         """
         cur = db.cursor()
-        cur.execute("SELECT ip_address FROM printers WHERE display = TRUE")
+        cur.execute("SELECT ip_address FROM printers WHERE visible = TRUE")
         rows = cur.fetchall()
         cur.close()
 
@@ -107,6 +113,7 @@ async def main():
 
 
 if __name__ == '__main__':
+    sleep(5)
     if sys.platform == 'linux':
         asyncio.run(main())
     elif sys.platform == 'win32':
