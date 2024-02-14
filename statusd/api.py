@@ -230,8 +230,7 @@ def settings_api():
             for k, v in key_values.items():
                 if not (setting := Setting.query.filter_by(key=k).first()):
                     return error_resp('Invalid key')
-                v = str(escape(v)) if v else setting.default_value
-                setting.value = eval(f"{setting.type}({v})")
+                setting.value = v if v else setting.default_value
                 db.session.add(setting)
             db.session.commit()
             return success_resp('Settings updated')

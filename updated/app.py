@@ -49,19 +49,22 @@ class ConfigUpdater:
                 settings = dict(cur.fetchall())
                 cur.close()
 
-                self.setting.running = settings['updated_run'] == 'true'
+                run = settings['updated_run'] == 'true'
+
+                if run != self.setting.running:
+                    print("-- Starting --" if not self.setting.running else "-- Stop --")
+
+                self.setting.running = run
                 self.setting.refresh_interval = int(settings['updated_update_interval'])
                 self.setting.session_timeout = int(settings['updated_try_timout'])
                 self.setting.delay = int(settings['updated_try_delay_factor'])
                 self.setting.constant_field_updates = settings['updated_constant_field_updates'] == 'true'
 
-                print(f"Running: {self.setting.running}")
-
                 sleep(3)
 
             except Exception as e:
                 config_updater.stop()
-                print("Exit(1)", e)
+                print("-- Exit(1) --", e)
                 exit(1)
 
     def start(self):

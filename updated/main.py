@@ -21,6 +21,7 @@ async def get_status(session: aiohttp.ClientSession, db, ip: str, delay: int = 0
     """
     url = f'{env.sourced_url}?ip={ip}'
     await asyncio.sleep(delay)
+    print(f"update queue: {ip}")
     try:
         async with session.get(url, timeout=setting.session_timeout) as resp:
             raw_resp = json.loads(await resp.text())
@@ -62,7 +63,7 @@ async def get_status(session: aiohttp.ClientSession, db, ip: str, delay: int = 0
                         (current_state, last_state, last_online,
                          ip,))
 
-            print(f"update {ip}")
+            print(f"updated: {ip}")
 
             cur.close()
             db.commit()
