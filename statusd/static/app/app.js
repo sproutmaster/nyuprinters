@@ -30,7 +30,8 @@
             },
             success: (data) => {
                 data.forEach((printer) => {
-                    populateCard(printer);
+                    if (printer.meta.status !== "Provisioning")
+                        populateCard(printer);
                 });
             }
         });
