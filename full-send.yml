@@ -1,0 +1,80 @@
+version: '3.8'
+services:
+  traefik:
+    image: "traefik"
+    restart: always
+    command:
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--global.sendAnonymousUsage=false"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.websecure.address=:443"
+
+      - "--certificatesresolvers.tls.acme.httpchallenge=true"
+      - "--certificatesresolvers.tls.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.tls.acme.email=${ACME_EMAIL}"
+      - "--certificatesresolvers.tls.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik:/letsencrypt"
+
+
+  postgres:
+    extends:
+      file: ./compose.yaml
+      service: postgres
+    restart: always
+    environment:
+      - "POSTGRES_USER=${POSTGRES_USER}"
+      - "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}"
+
+
+  sourced:
+    build:
+      context: ./sourced
+      dockerfile: Dockerfile
+    restart: always
+
+
+  updated:
+    build:
+      context: ./updated
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - "POSTGRES_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/nyup"
+      - "SOURCED_URL=http://sourced:8000"
+    depends_on:
+      - sourced
+      - postgres
+
+
+  statusd:
+    build:
+      context: ./statusd
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - "DISCORD=${DISCORD}"
+      - "POSTGRES_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/nyup"
+      - "SECRET_KEY=${SECRET_KEY}"
+      - "API_KEY=${API_KEY}"
+      - "SOURCED_URL=http://sourced:8000"
+      - "DEFAULT_LOCATION=${DEFAULT_LOCATION}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.request.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.request.tls=true"
+      - "traefik.http.routers.request.tls.certresolver=tls"
+      - "traefik.http.services.request.loadbalancer.server.port=5000"
+    depends_on:
+      - postgres
+
+volumes:
+  traefik:
