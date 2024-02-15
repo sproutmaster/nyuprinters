@@ -22,14 +22,14 @@ statusdrun:
 
 storerun:
 	@echo "### postgres: localhost:5432"
-	$(MAKE) -C store run
+	$(MAKE) -C store start
 
 updatedrun:
 	$(MAKE) -C updated run
 
 .PHONY: seed
 seed:
-	$(MAKE) -C store run
+	$(MAKE) -C store start
 	sleep 3
 	$(MAKE) -C statusd seed
 
@@ -47,7 +47,8 @@ clean:
 	$(MAKE) -C sourced clean
 	$(MAKE) -C statusd clean
 	$(MAKE) -C updated clean
+	$(MAKE) -C store stop
 
-.PHONY: reset
-reset: clean
-	$(MAKE) -C store reset
+.PHONY: delete
+delete: clean
+	$(MAKE) -C store delete
