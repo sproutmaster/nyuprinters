@@ -27,7 +27,7 @@ services:
 
   postgres:
     extends:
-      file: ./compose.yaml
+      file: ./compose.yml
       service: postgres
     restart: always
     environment:
