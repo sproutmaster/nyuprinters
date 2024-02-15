@@ -3,7 +3,7 @@ from models import db, Location, Printer, Setting, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user
 from requests import get
-from app import env
+from app import env, cache
 from json import loads as json_parse
 from utils import error_resp, success_resp, simple_sanitize
 
@@ -327,6 +327,7 @@ def users_api():
 
 
 @api.route('/contrib')  # Get contributors list from github
+@cache.cached()
 def contrib():
     try:
         resp = get(f'https://api.github.com/repos/{env.repo}/contributors')

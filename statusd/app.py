@@ -20,6 +20,7 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_migrate import Migrate
+from flask_caching import Cache
 from os import environ
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -37,13 +38,14 @@ class Env:
         self.repo = environ.get("REPO", default='sproutmaster/nyuprinters')
         self.github = f'https://github.com/{self.repo}'
         self.postgres_url = environ.get("POSTGRES_URL", default="postgresql://admin:admin@localhost:5432/nyup")
-        self.default_loc = environ.get("DEFAULT_LOC", default="dev")
+        self.default_loc = environ.get("DEFAULT_LOCATION", default="dev")
         self.secret_key = environ.get("SECRET_KEY", default="dingdongbingbongbangdangpfchans")
         self.sourced_url = environ.get("SOURCED_URL", default="http://localhost:8000")
         self.api_key = environ.get("API_KEY", default='iloveapis')
 
 
 env = Env()
+cache = Cache(config={"CACHE_TYPE": "SimpleCache", "CACHE_DEFAULT_TIMEOUT": 3600})
 
 
 def create_app():
@@ -56,6 +58,9 @@ def create_app():
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
     db.init_app(app)
+    Migrate(app, db)
+
+    cache.init_app(app)
 
     login_manager = LoginManager()
     login_manager.login_view = "underground.underground_home"
@@ -65,5 +70,4 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
 
-    Migrate(app, db)
     return app

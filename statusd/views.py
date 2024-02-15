@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, escape, redirect, url_for, request, jsonify
 from flask_login import login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from app import env
+from app import env, cache
 from models import db, Location, User, Setting
 from utils import simple_sanitize, error_resp, success_resp
 from sqlalchemy import inspect
@@ -12,6 +12,7 @@ underground = Blueprint('underground', __name__, static_folder='static', templat
 
 
 @index.route('/')
+@cache.cached()
 def home():
     return render_template('index.html',
                            github=env.github,
@@ -53,7 +54,8 @@ def send_info_by_loc(loc):
     filters = {'visible': True} if not current_user.is_authenticated else {}
     loc = simple_sanitize(loc.lower())
 
-    if loc := Location.query.filter_by(short_name=loc).first():
+    if loc := Location.query.filter_by(short_name=loc, **filters).first():
+        print(loc.short_name)
         return render_template('app.html',
                                login=current_user.is_authenticated,
                                locs=Location.query.filter_by(**filters).all(),
@@ -84,7 +86,7 @@ def underground_auth():
     # For getting user info
     if request.method == 'GET':
         if current_user.is_authenticated:
-            return jsonify({'netid': current_user.netid, 'name': current_user.name, 'type': current_user.type})
+            return {'netid': current_user.netid, 'name': current_user.name, 'type': current_user.type}
         return jsonify({'netid': None, 'name': None, 'type': None})
 
     # For logging in

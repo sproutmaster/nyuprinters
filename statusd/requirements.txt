@@ -12,3 +12,4 @@ gunicorn
 pytz
 requests
 python-dotenv
+Flask-Caching
