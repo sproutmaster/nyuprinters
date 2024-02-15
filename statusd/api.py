@@ -329,8 +329,7 @@ def users_api():
 @api.route('/contrib')  # Get contributors list from github
 def contrib():
     try:
-        resp = get(f'https://api.github.com/repos/{env.repo}/contributors',
-                   headers={'Authorization': f'Bearer {env.github_token}'})
+        resp = get(f'https://api.github.com/repos/{env.repo}/contributors')
         return resp.json()
     except Exception:
         return error_resp('Failed to get contributors')
