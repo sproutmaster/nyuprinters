@@ -16,15 +16,16 @@ Each microservice is responsible for various tasks as shown below:
 - Printer Monitoring with real-time status updates
 - Multiple Locations including private mode
 - Admin dashboard
-- Multi-user accounts with privileged access levels
+- Multi-user accounts with different access levels
 - Private and Public API
 - Smart feedback loop for optimized monitoring (in progress)
-- Reporting and analytics (in progress)
+- Reports and analytics (in progress)
 - Email notifications (in progress)
 
 ## Documentation
 
 - [API](./docs/api.md)
+- [Development Guide](./docs/dev-guide.md)
 - [Sourced](./docs/sourced.md)
 - [Statusd](./docs/statusd.md)
 - [Updated](./docs/updated.md)
