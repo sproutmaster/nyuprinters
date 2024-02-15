@@ -13,7 +13,7 @@ class Location(db.Model):
     name = db.Column(db.String(30), nullable=False)
     short_name = db.Column(db.String(20), nullable=False, unique=True)
     description = db.Column(db.Text)
-    printers = db.relationship('Printer', backref=db.backref('location'))
+    printers = db.relationship('Printer', backref=db.backref('location'), lazy='dynamic')
     visible = db.Column(db.Boolean, default=False)
 
     def info(self):
