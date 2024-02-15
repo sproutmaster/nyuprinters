@@ -8,8 +8,8 @@ services:
     volumes:
       - 'nyup_postgres:/var/lib/postgresql/data:rw'
     environment:
-      - 'POSTGRES_PASSWORD=admin'
-      - 'POSTGRES_USER=admin'
+      - 'POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-admin}'
+      - 'POSTGRES_USER=${POSTGRES_USER:-admin}'
       - 'POSTGRES_DB=nyup'
 
 volumes:
