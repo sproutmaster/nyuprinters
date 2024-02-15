@@ -1,11 +1,11 @@
 FROM python:3.10-bullseye
 
+COPY . /nyup
+WORKDIR /nyup
+
 RUN apt update \
   && rm -rf /var/lib/apt/lists/ \
   && pip3 install -r requirements.txt
-
-COPY . /nyup
-WORKDIR /nyup
 
 ENV DEBUG=0
 ENV SECRET_KEY=$SECRET_KEY
