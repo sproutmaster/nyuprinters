@@ -1,4 +1,4 @@
-FROM python:3.11-bullseye
+FROM python:3.10-bullseye
 
 RUN apt update \
   && apt install build-dep \
@@ -7,5 +7,11 @@ RUN apt update \
 
 COPY . /nyup
 WORKDIR /nyup
+
+ENV DEBUG=0
+ENV SECRET_KEY=$SECRET_KEY
+ENV API_KEY=$API_KEY
+ENV POSTGRES_URL=$POSTGRES_URL
+ENV DISCORD=$DISCORD
 
 CMD gunicorn -b 0.0.0.0:5000 -w 8 main:app
