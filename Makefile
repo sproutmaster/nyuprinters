@@ -2,6 +2,12 @@ help:
 	@echo '### Available make targets:'
 	@grep PHONY: Makefile | cut -d: -f2 | sed '1d;s/^/make/'
 
+.PHONY: fix
+fix:
+	@echo "### Adding socket permissions to docker"
+	sudo groupadd docker && sudo gpasswd -a ${USER} docker && sudo systemctl restart docker
+	newgrp docker
+
 .PHONY: dev
 dev:
 	$(MAKE) storerun
