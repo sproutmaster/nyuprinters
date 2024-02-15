@@ -1,7 +1,8 @@
 (function () {
 
-    let LOGGED_IN = false;
-    function loggedIn(){
+    let LOGGED_IN;
+
+    function loggedIn() {
         $.ajax({
             url: "underground/auth",
             type: "GET",
@@ -10,18 +11,16 @@
             }
         });
     }
+
     loggedIn();
 
     window.addEventListener("load", main);
 
-    const ACCARDION_ERROR_ICON = "static/icons/error.svg";
     const ACCARDION_CAUTION_ICON = "static/icons/caution.svg";
     const ACCARDION_NO_ERROR_ICON = "static/icons/no-errors.svg";
-
     const DEFAULT_PROGRESS_BAR_VALUE = 0;
 
     function main() {
-
         const location = $('#main_container').data('loc');
         $.ajax({
             url: "api/printers",
@@ -47,8 +46,7 @@
         setName(card, printer_data);
         setSupplies(card, printer_data);
         setTrays(card, printer_data);
-        let container = document.getElementById("print-status");
-        container.children[0].appendChild(card);
+        $("#print-status").children().eq(0).append(card);
     }
 
     /**
@@ -57,7 +55,7 @@
      * @param {JSON} data - data according to which the card is set up.
      */
     function setPrinterStatus(card, data) {
-        let isError = (data.response.status === "error");
+        let isError = data.response.status === "error";
         $(card).attr("class", "card");
         if (isError) {
             $(card).addClass("attention");
@@ -82,12 +80,12 @@
      */
     function setErrors(card, data) {
         data = data.response.message.errors;
-        $(card).find(".accordion-body").innerHTML = "";
-        for (let i = 0; i < data.length; i++) {
-            let result = document.createElement("p");
-            result.appendChild(document.createTextNode("- " + data[i]));
-            $(card).find(".accordion-body").append(result);
-        }
+        let accordionBody = $(card).find(".accordion-body");
+        accordionBody.empty();
+        data.forEach((error) => {
+            let result = $("<p>").text("- " + error);
+            accordionBody.append(result);
+        });
     }
 
     /**
@@ -95,11 +93,10 @@
      * @param {HTMLElement} card - card that needs to be set up.
      */
     function noErrors(card) {
-        $(card).find(".accordion-body").innerHTML = "";
-        let result = document.createElement("p");
-        result.classList.add("text-center");
-        result.appendChild(document.createTextNode("No Errors!"));
-        $(card).find(".accordion-body").append(result);
+        let accordionBody = $(card).find(".accordion-body");
+        accordionBody.empty();
+        let result = $("<p>").addClass("text-center").text("No Errors!");
+        accordionBody.append(result);
     }
 
     /**
@@ -329,7 +326,6 @@
             body.appendChild(progressContainer);
         }
 
-
         // Footer
         let cardMessageBlock = document.createElement("div");
         cardMessageBlock.classList.add("card-message-block");
@@ -342,7 +338,6 @@
         cardMain.appendChild(body);
         card.appendChild(cardMain);
         card.appendChild(cardMessageBlock);
-
 
         return card;
     }
@@ -358,7 +353,6 @@
 
         const accordionId1 = "accordion-parrent-id-" + id;
         const accordionId2 = "accordion-child-id-" + id;
-
 
         let accordion = document.createElement("div");
         accordion.classList.add("accordion");
@@ -384,13 +378,11 @@
         icon.alt = "error-icon";
         accordionHeaderButton.appendChild(icon);
 
-
         let accordionCollapse = document.createElement("div");
         accordionCollapse.id = accordionId2;
         accordionCollapse.classList.add("accordion-collapse", "collapse");
         accordionCollapse.setAttribute("aria-labelledby", "headingOne");
         accordionCollapse.setAttribute("data-mdb-parent", ("#" + accordionId1));
-
 
         let accordionBody = document.createElement("div");
         accordionBody.classList.add("accordion-body");
@@ -442,6 +434,5 @@
         }
 
     }
-
 
 })();
