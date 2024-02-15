@@ -32,15 +32,14 @@ load_dotenv()
 class Env:
     def __init__(self):
         self.version = environ.get("VERSION", default="0.1")
-        self.support_contact = environ.get("SUPPORT_CONTACT", default="joe@osiris.cyber.nyu.edu")
-        self.discord = environ.get("DISCORD", default='#')
+        self.support_contact = environ.get("SUPPORT_CONTACT", default="67924667+sproutmaster@users.noreply.github.com")
+        self.discord = environ.get("DISCORD", default='')
         self.repo = environ.get("REPO", default='sproutmaster/nyuprinters')
-        self.github_token = environ.get("GITHUB_TOKEN", default='')
         self.github = f'https://github.com/{self.repo}'
         self.postgres_url = environ.get("POSTGRES_URL", default="postgresql://admin:admin@localhost:5432/nyup")
-        self.default_loc = environ.get("DEFAULT_LOC", default="bobst")
+        self.default_loc = environ.get("DEFAULT_LOC", default="dev")
         self.secret_key = environ.get("SECRET_KEY", default="dingdongbingbongbangdangpfchans")
-        self.sourced_url = environ.get("SOURCED_URI", default="http://localhost:8000")
+        self.sourced_url = environ.get("SOURCED_URL", default="http://localhost:8000")
         self.api_key = environ.get("API_KEY", default='iloveapis')
 
 
