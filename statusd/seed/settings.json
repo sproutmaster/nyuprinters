@@ -1,8 +1,8 @@
 [
   {
     "key": "updated_run",
-    "value": "True",
-    "default_value": "True",
+    "value": "false",
+    "default_value": "false",
     "type": "bool",
     "description": "Whether or not to run the update script"
   },
@@ -29,8 +29,8 @@
   },
   {
     "key": "updated_constant_field_updates",
-    "value": "True",
-    "default_value": "False",
+    "value": "false",
+    "default_value": "false",
     "type": "bool",
     "description": "Weather or not to update the constant fields like serial, model, etc with every fetch"
   }
