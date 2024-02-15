@@ -78,4 +78,4 @@ services:
 
 volumes:
   traefik:
-  postgres:
+  nyup_postgres:
