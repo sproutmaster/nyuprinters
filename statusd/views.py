@@ -2,8 +2,10 @@ from flask import Blueprint, render_template, escape, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import env
-from models import db, Location, User
+from models import db, Location, User, Setting
 from utils import simple_sanitize, error_resp, success_resp
+from sqlalchemy import inspect
+from json import load as json_parse
 
 index = Blueprint('index', __name__, static_folder='static', template_folder='templates')
 underground = Blueprint('underground', __name__, static_folder='static', template_folder='templates')
@@ -16,6 +18,34 @@ def home():
                            discord=env.discord,
                            loc=env.default_loc
                            )
+
+
+@index.route('/init')
+def init():
+    inspector = inspect(db.engine)
+    if "settings" not in inspector.get_table_names():
+        db.create_all()
+        with open('seed/settings.json', 'r') as file:
+            init_settings = json_parse(file)
+
+        settings = [Setting(**resp) for resp in init_settings]
+        init_location = Location(name='Dev', short_name='dev', visible=False)
+        init_user = User(
+            name='Admin',
+            netid='admin',
+            password=generate_password_hash('admin', "pbkdf2:sha256"),
+            type='superuser',
+            location=init_location
+        )
+
+        db.session.add_all(settings)
+        db.session.add(init_location)
+        db.session.add(init_user)
+        db.session.commit()
+
+        return success_resp('Database initialized')
+
+    return success_resp('OK')
 
 
 @index.route('/<string:loc>')
@@ -45,6 +75,7 @@ def underground_home():
                            superuser=current_user.type == 'superuser' if login else False,
                            footer=False,
                            github=env.github,
+                           discord=env.discord,
                            )
 
 
