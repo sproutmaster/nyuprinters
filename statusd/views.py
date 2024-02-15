@@ -55,7 +55,6 @@ def send_info_by_loc(loc):
     loc = simple_sanitize(loc.lower())
 
     if loc := Location.query.filter_by(short_name=loc, **filters).first():
-        print(loc.short_name)
         return render_template('app.html',
                                login=current_user.is_authenticated,
                                locs=Location.query.filter_by(**filters).all(),
