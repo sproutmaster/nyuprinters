@@ -50,7 +50,8 @@ def printers_api():
     if request.method == 'GET':
         if location:  # For getting printers at a location
             if loc := Location.query.filter_by(short_name=location, **filters).first():
-                return jsonify(list(map(lambda x: x.info(login), loc.printers.order_by(Printer.name).all())))
+                p_list = sorted(list(map(lambda x: x.info(login), loc.printers)), key=lambda x: x['meta']['name'])
+                return jsonify(p_list)
             else:
                 return []
         elif printer_id:  # For getting a specific printer
@@ -153,7 +154,7 @@ def locations_api():
             locations = Location.query.filter_by(short_name=short_name, **filters).first()
             return jsonify(locations.info())
         else:
-            locations = Location.query.filter_by(**filters)
+            locations = Location.query.filter_by(**filters).order_by(Location.name).all()
             return jsonify(list(map(lambda x: x.info(), locations)))
 
     # Add a location to DB
