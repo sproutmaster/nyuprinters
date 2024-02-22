@@ -105,9 +105,15 @@
      * @param {HTMLElement} card - card that needs to be set up.
      * @param {JSON} data - data from which the name of the card is extracted.
      */
-    function setName(card, data) {
+    function setName(card, data) {;
         if (LOGGED_IN) {
-            let nameLink = $('<a>').attr('href', 'https://' + data.meta.ip).attr('target', '_new').text(data.meta.name);
+            let nameLink = $('<a>')
+                .attr('href', 'https://' + data.meta.ip)
+                .attr('target', '_new')
+                .css('color', 'white')
+                .css('text-decoration', 'none')
+                .css('outline', 'none')
+                .html(data.meta.name + ' <i class="fas fa-up-right-from-square"></i>');
             $(card).find('.card-header-text').empty().append(nameLink);
         } else {
             $(card).find('.card-header-text').text(data.meta.name);
