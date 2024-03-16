@@ -58,7 +58,8 @@ def create_app():
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
     db.init_app(app)
-    Migrate(app, db)
+    migrate = Migrate(app, db)
+    migrate.init_app(app, db)
 
     cache.init_app(app)
 
