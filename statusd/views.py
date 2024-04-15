@@ -59,6 +59,7 @@ def send_info_by_loc(loc):
                                login=current_user.is_authenticated,
                                locs=Location.query.filter_by(**filters).all(),
                                loc=loc.short_name,
+                               loc_full=loc.name,
                                github=env.github,
                                )
 
