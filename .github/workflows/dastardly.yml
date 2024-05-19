@@ -1,0 +1,21 @@
+name: Dastardly Scan
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dastardly Scan
+        uses: PortSwigger/dastardly-github-action@v1.0.0
+        with:
+          target-url: 'https://nyuprinters.com'
+
+      - name: Publish Test Report
+        if: always()
+        uses: mikepenz/action-junit-report@v3
+        with:
+          report_paths: '**/dastardly-report.xml'
+          require_tests: true
